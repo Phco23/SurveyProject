@@ -1,0 +1,31 @@
+﻿@model SurveyModel
+
+<h2>Survey Details</h2>
+<p>@Model.Title</p>
+<p>@Model.Description</p>
+
+<h3>Questions</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Question Name</th>
+            <th>Question Type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var question in Model.Questions)
+        {
+            <tr>
+                <td>@question.QuestionText</td>
+                <td>@question.QuestionType.Name</td>
+                <td>
+                    <a asp-controller="Questions" asp-action="Edit" asp-route-id="@question.Id">Edit</a> |
+                    <a asp-controller="Questions" asp-action="Delete" asp-route-id="@question.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-controller="Questions" asp-action="Create" asp-route-surveyId="@Model.Id" class="btn btn-primary">Add Question</a>

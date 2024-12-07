@@ -1,0 +1,31 @@
+﻿@model SurveyModel
+<h4>Create prodict</h4>
+<div class="col-md-9">
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label>Title</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label>Expired Date</label>
+            <input asp-for="ExpiredDate" class="form-control" type="date" />
+            <span asp-validation-for="ExpiredDate" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <label>RoleId</label>
+            <input asp-for="RoleId" class="form-control" />
+            <span asp-validation-for="RoleId" class="text-danger" />
+        </div>
+        <div class="form-group">
+            <button class=" btn btn-primary">Edit</button>
+        </div>
+    </form>
+    <a asp-action="Index">Back to List Product</a>
+</div>

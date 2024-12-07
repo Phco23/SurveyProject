@@ -23,7 +23,18 @@ namespace SurveyProject.Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<QuestionModel>()
+            .HasOne(q => q.Survey)
+            .WithMany(s => s.Questions)
+            .HasForeignKey(q => q.SurveyId);
+
+            modelBuilder.Entity<OptionModel>()
+                .HasOne(o => o.Question)
+                .WithMany(q => q.Options)
+                .HasForeignKey(o => o.QuestionId);
 
             modelBuilder.Entity<ResponseDetailsModel>()
                 .HasOne(rd => rd.Response)
