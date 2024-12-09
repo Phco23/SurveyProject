@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SurveyProject.Models
 {
-    public class FAQ
+    public class FAQModel
     {
         [Key]
         public int Id {get; set;}
