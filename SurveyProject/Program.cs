@@ -28,7 +28,8 @@ namespace SurveyProject
             });
 
             builder.Services.AddIdentity<IdentityUserModel, IdentityRole>()
-                .AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
+               .AddEntityFrameworkStores<DataContext>()
+               .AddDefaultTokenProviders();
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
