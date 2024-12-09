@@ -19,7 +19,7 @@ namespace SurveyProject.Areas.Admin.Controllers
         {
             return View(await _dataContext.Surveys.ToListAsync());
         }
-        // GET: Surveys/Details/5
+        // GET: Surveys/Details/{id}
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
