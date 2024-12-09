@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SurveyProject.Models;
+using SurveyProject.Repository;
 
 namespace SurveyProject.Controllers
 {
@@ -8,17 +11,30 @@ namespace SurveyProject.Controllers
     {
         private UserManager<IdentityUserModel> _userManager;
         private SignInManager<IdentityUserModel> _signInManager;
-        public AccountController(SignInManager<IdentityUserModel> signInManager, UserManager<IdentityUserModel> userManager)
+
+		public AccountController(SignInManager<IdentityUserModel> signInManager, UserManager<IdentityUserModel> userManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
-        }
+
+
+		}
 
         public IActionResult Login(string returnUrl)
         {
             return View(new LoginViewModel { ReturnUrl = returnUrl });
         }
-        [HttpPost]
+		public async Task<IActionResult>  NewPass(string returnUrl)
+		{
+			return View();
+		}
+		public async Task<IActionResult>  ForgetPass(string returnUrl)
+		{
+			return View();
+		}
+
+
+		[HttpPost]
         public async Task<IActionResult> Login(LoginViewModel LoginVM)
         {
             if (ModelState.IsValid)
