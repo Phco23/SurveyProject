@@ -155,7 +155,7 @@ namespace SurveyProject.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("SurveyProject.Models.FAQ", b =>
+            modelBuilder.Entity("SurveyProject.Models.FAQModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

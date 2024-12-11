@@ -12,8 +12,8 @@ using SurveyProject.Repository;
 namespace SurveyProject.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241209020657_IntialCreate2")]
-    partial class IntialCreate2
+    [Migration("20241209040252_InitialCreate8")]
+    partial class InitialCreate8
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,7 +158,7 @@ namespace SurveyProject.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("SurveyProject.Models.FAQ", b =>
+            modelBuilder.Entity("SurveyProject.Models.FAQModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

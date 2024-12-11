@@ -30,7 +30,7 @@ namespace SurveyProject.Areas.Admin.Controllers
         // POST: CREATE
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(FAQ faq)
+        public async Task<IActionResult> Create(FAQModel faq)
         {
             if (ModelState.IsValid)
             {
@@ -59,7 +59,7 @@ namespace SurveyProject.Areas.Admin.Controllers
         // POST: FAQ/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, FAQ faq)
+        public async Task<IActionResult> Edit(int id, FAQModel faq)
         {
             if (id != faq.Id)
             {

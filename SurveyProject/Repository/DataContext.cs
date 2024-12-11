@@ -20,7 +20,7 @@ namespace SurveyProject.Repository
         public DbSet<OptionModel> Options { get; set; }
         public DbSet<QuestionTypeModel> QuestionTypes { get; set; }
         public DbSet<ResponseDetailsModel> ResponseDetails { get; set; }
-        public DbSet<FAQ> FAQs {get; set;}
+        public DbSet<FAQModel> FAQs {get; set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
