@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SurveyProject.Migrations;
 using SurveyProject.Models;
 using SurveyProject.Repository;
 
@@ -43,6 +44,12 @@ namespace SurveyProject
             });
 
             var app = builder.Build();
+
+            builder.Services.AddDbContext<SurveyDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddScoped<IContestRepository, ContestRepository>();
+            builder.Services.AddScoped<IContestService, ContestService>();
+            builder.Services.AddControllers();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

@@ -12,8 +12,6 @@ namespace SurveyProject.Repository
 
         }
 
-
-
         public DbSet<SurveyModel> Surveys { get; set; }
         public DbSet<ResponseModel> Responses { get; set; }
         public DbSet<QuestionModel> Questions { get; set; }
