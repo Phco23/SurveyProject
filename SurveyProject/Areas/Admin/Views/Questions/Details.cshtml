@@ -1,0 +1,30 @@
+﻿@using SurveyProject.MappingProfiles
+@model QuestionWithOptionsDto
+
+<h2>Question Details</h2>
+<p><b>Question:</b> @Model.QuestionText</p>
+
+<h3>Options</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Option Text</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var option in Model.Options)
+        {
+            <tr>
+                <td>@option.OptionText</td>
+                <td>
+                    <a asp-action="EditOption" asp-route-id="@option.Id" class="btn btn-warning">Edit</a>
+                    <form asp-action="DeleteOption" asp-route-id="@option.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="AddOption" asp-route-questionId="@Model.Id" class="btn btn-primary">Add Option</a>

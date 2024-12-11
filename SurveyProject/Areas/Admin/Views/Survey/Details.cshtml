@@ -1,36 +1,5 @@
 ﻿@model SurveyModel
 
-<div class="container mt-5">
-    <div class="row mb-4">
-        <div class="col text-center">
-            <h2 class="fw-bold">Survey Details</h2>
-            <p class="text-muted">@Model.Title</p>
-        </div>
-    </div>
-
-<h3>Questions</h3>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Question Name</th>
-            <th>Question Type</th> 
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var question in Model.Questions)
-        {
-            <tr>
-                <td>@question.QuestionText</td>
-                <td>@question.QuestionType.Name</td>
-                <td>
-                    <a asp-controller="Questions" asp-action="Edit" asp-route-id="@question.Id">Edit</a> |
-                    <a asp-controller="Questions" asp-action="Delete" asp-route-id="@question.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
 
     <div class="row mb-5">
         <div class="col-md-8 offset-md-2">
@@ -72,6 +41,7 @@
                                 <td>@question.QuestionType.Name</td>
                                 <td>
                                     <a asp-controller="Questions" asp-action="Edit" asp-route-id="@question.Id" class="btn btn-sm btn-warning">Edit</a>
+                                    <a asp-controller="Questions" asp-action="Details" asp-route-id="@question.Id" class="btn btn-sm btn-warning">Details</a>
                                     <a asp-controller="Questions" asp-action="Delete" asp-route-id="@question.Id" class="btn btn-sm btn-danger ms-2">Delete</a>
                                 </td>
                             </tr>

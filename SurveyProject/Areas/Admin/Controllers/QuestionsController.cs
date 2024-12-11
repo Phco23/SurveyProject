@@ -27,19 +27,58 @@ namespace SurveyProject.Areas.Admin.Controllers
         }
 
         // GET: Questions/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int id)
         {
-            if (id == null) return NotFound();
+            var question = _context.Questions
+                .Include(q => q.Options) // Load related options
+                .FirstOrDefault(q => q.Id == id);
 
-            var question = await _context.Questions
-                .Include(q => q.Survey)
-                .Include(q => q.QuestionType)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            if (question == null)
+            {
+                return NotFound();
+            }
 
-            if (question == null) return NotFound();
+            var questionDto = new QuestionWithOptionsDto
+            {
+                Id = question.Id,
+                QuestionText = question.QuestionText,
+                QuestionTypeId = question.QuestionTypeId,
+                Options = question.Options.Select(o => new OptionDto
+                {
+                    Id = o.Id,
+                    OptionText = o.OptionText
+                }).ToList()
+            };
 
-            return View(question);
+            return View(questionDto);
         }
+
+        public IActionResult AddOption(int questionId)
+        {
+            ViewBag.QuestionId = questionId; // Pass QuestionId to the view
+            return View(new OptionDto());
+        }
+
+        [HttpPost]
+        public IActionResult AddOption(int questionId, OptionDto optionDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var option = new OptionModel
+                {
+                    QuestionId = questionId,
+                    OptionText = optionDto.OptionText
+                };
+
+                _context.Options.Add(option);
+                _context.SaveChanges();
+
+                return RedirectToAction("Details", new { id = questionId });
+            }
+
+            return View(optionDto);
+        }
+
         // GET: Questions/Create
         public IActionResult Create(int? surveyId)
         {
@@ -96,25 +135,39 @@ namespace SurveyProject.Areas.Admin.Controllers
             if (question == null) return NotFound();
 
             ViewData["QuestionTypeId"] = new SelectList(_context.QuestionTypes, "Id", "Name", question.QuestionTypeId);
+
+            var model = new QuestionDto
+            {
+                SurveyId = id.Value
+            };
+
             return View(question);
         }
 
         // POST: Questions/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, QuestionModel question)
+        public async Task<IActionResult> Edit(int id, QuestionDto questionDto)
         {
-            if (id != question.Id) return NotFound();
+            if (id != questionDto.SurveyId) return NotFound();
 
             if (ModelState.IsValid)
             {
+
+                var question = new QuestionModel
+                {
+                    QuestionText = questionDto.QuestionText,
+                    QuestionTypeId = questionDto.QuestionTypeId,
+                    SurveyId = questionDto.SurveyId
+                };
+
                 _context.Update(question);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Surveys", new { id = question.SurveyId });
+                return RedirectToAction("Details", "Surveys", new { id = questionDto.SurveyId });
             }
 
-            ViewData["QuestionTypeId"] = new SelectList(_context.QuestionTypes, "Id", "Name", question.QuestionTypeId);
-            return View(question);
+            ViewData["QuestionTypeId"] = new SelectList(_context.QuestionTypes, "Id", "Name", questionDto.QuestionTypeId);
+            return View(questionDto);
         }
 
         // GET: Questions/Delete/5

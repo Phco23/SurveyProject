@@ -11,9 +11,11 @@ namespace SurveyProject.Controllers
     {
         private UserManager<IdentityUserModel> _userManager;
         private SignInManager<IdentityUserModel> _signInManager;
+        private RoleManager<IdentityRole> _roleManager;
 
-		public AccountController(SignInManager<IdentityUserModel> signInManager, UserManager<IdentityUserModel> userManager)
+        public AccountController(RoleManager<IdentityRole> roleManager, SignInManager<IdentityUserModel> signInManager, UserManager<IdentityUserModel> userManager)
         {
+            _roleManager = roleManager;
             _signInManager = signInManager;
             _userManager = userManager;
 
@@ -70,7 +72,13 @@ namespace SurveyProject.Controllers
                 IdentityResult result = await _userManager.CreateAsync(newUser, user.Password);
                 if (result.Succeeded)
                 {
-                    TempData["Success"] = "Tạo user thành công.";
+                    var role = await _roleManager.FindByNameAsync("Student");
+                    if (role != null)
+                    {
+                        newUser.RoleId = role.Id; // Set RoleId manually
+                        await _userManager.UpdateAsync(newUser); // Update user to save RoleId
+                        await _userManager.AddToRoleAsync(newUser, "Student");
+                    }
 
                     return Redirect("/account/login");
                 }
