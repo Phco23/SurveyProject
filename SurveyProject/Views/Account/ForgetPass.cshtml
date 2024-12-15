@@ -1,4 +1,4 @@
-﻿@model AppUserModel
+﻿@model IdentityUserModel
 
 <div class="container-fluid bg-primary py-5 mb-5 page-header">
     <div class="container py-5">
@@ -33,9 +33,9 @@
                                 <div class="input-group-text">
                                     <i class="bi bi-envelope"></i> <!-- Bootstrap icon for email -->
                                 </div>
-                                <input asp-for="Email" id="Email" type="email" class="form-control" placeholder="Enter your email" />
+                                @* <input asp-for=" Email " id="Email" type="email" class="form-control" placeholder="Enter your email" /> *@
                             </div>
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                            @* <span asp-validation-for="Email" class="text-danger"></span> *@
                         </div>
 
                         <!-- Submit Button -->

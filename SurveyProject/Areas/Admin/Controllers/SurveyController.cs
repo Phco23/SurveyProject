@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SurveyProject.Models;
 using SurveyProject.Repository;
+using System.Data;
 
 namespace SurveyProject.Areas.Admin.Controllers
 {
@@ -48,7 +51,7 @@ namespace SurveyProject.Areas.Admin.Controllers
 			if (ModelState.IsValid)
 			{
 				survey.CreatedDate = DateTime.Now;
-				survey.IsActive = true;
+				survey.IsActive = false;
 				survey.TotalResponses = 0;
 
 				_dataContext.Add(survey);
@@ -66,6 +69,13 @@ namespace SurveyProject.Areas.Admin.Controllers
             var survey = await _dataContext.Surveys.FindAsync(id);
             if (survey == null) return NotFound();
 
+            var isActiveOptions = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Active", Value = "true" },
+                new SelectListItem { Text = "Inactive", Value = "false" }
+            };
+            ViewBag.IsActive = new SelectList(isActiveOptions, "Value", "Text", survey.IsActive.ToString().ToLower());
+
             return View(survey);
         }
 
@@ -74,6 +84,13 @@ namespace SurveyProject.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, SurveyModel survey)
         {
+            var isActiveOptions = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Active", Value = "true" },
+                new SelectListItem { Text = "Inactive", Value = "false" }
+            };
+            ViewBag.IsActive = new SelectList(isActiveOptions, "Value", "Text", survey.IsActive.ToString().ToLower());
+
             if (id != survey.Id) return NotFound();
 
             if (ModelState.IsValid)
