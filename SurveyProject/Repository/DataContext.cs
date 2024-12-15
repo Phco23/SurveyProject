@@ -35,7 +35,8 @@ namespace SurveyProject.Repository
             modelBuilder.Entity<OptionModel>()
                 .HasOne(o => o.Question)
                 .WithMany(q => q.Options)
-                .HasForeignKey(o => o.QuestionId);
+                .HasForeignKey(o => o.QuestionId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ResponseDetailsModel>()
                 .HasOne(rd => rd.Response)
@@ -53,6 +54,7 @@ namespace SurveyProject.Repository
                 .HasOne(rd => rd.Option)
                 .WithMany()
                 .HasForeignKey(rd => rd.OptionId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

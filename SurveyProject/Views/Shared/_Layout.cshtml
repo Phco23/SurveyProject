@@ -68,7 +68,14 @@
                 </div>
                 <a asp-controller="Contact" asp-action="Index" class="nav-item nav-link">Contact</a>
                 <a asp-controller="Survey" asp-action="ListSurvey" class="nav-item nav-link">Survey</a>
-                <a asp-controller="Account" asp-action="Login" class="nav-item nav-link">Login</a>
+                @if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    <a asp-controller="Account" asp-action="Logout" class="nav-item nav-link"> Hi, @User.Identity.Name, Logout</a>
+                }
+                else
+                {
+                    <a asp-controller = "Account" asp-action = "Login" class="nav-item nav-link">Login</a>
+                }
 
             </div>
             <a href="" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i class="fa fa-arrow-right ms-3"></i></a>

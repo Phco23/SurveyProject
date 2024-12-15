@@ -22,7 +22,7 @@ namespace SurveyProject.Controllers
 
 		}
 
-        public IActionResult Login(string returnUrl)
+        public IActionResult Login(string returnUrl = "/")
         {
             return View(new LoginViewModel { ReturnUrl = returnUrl });
         }
@@ -36,19 +36,29 @@ namespace SurveyProject.Controllers
 		}
 
 
-		[HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel LoginVM)
         {
+
             if (ModelState.IsValid)
             {
+                // Sign in using the provided credentials
                 Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(LoginVM.UserName, LoginVM.Password, false, false);
+               
                 if (result.Succeeded)
                 {
-                    return Redirect(LoginVM.ReturnUrl ?? "/");
-                }
-                ModelState.AddModelError("", " UserName and Password bị sai ");
+                    // Validate the return URL to prevent open redirect attacks
 
+                    return Redirect(LoginVM.ReturnUrl ?? "/");
+
+
+                }
+
+
+                ModelState.AddModelError("", "Invalid username and password");
             }
+
+            // Return the view with the login model if login failed
             return View(LoginVM);
         }
 

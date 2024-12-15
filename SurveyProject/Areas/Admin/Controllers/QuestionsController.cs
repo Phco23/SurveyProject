@@ -127,77 +127,114 @@ namespace SurveyProject.Areas.Admin.Controllers
 
 
         // GET: Questions/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int id)
         {
-            if (id == null) return NotFound();
-
-            var question = await _context.Questions.FindAsync(id);
-            if (question == null) return NotFound();
-
-            ViewData["QuestionTypeId"] = new SelectList(_context.QuestionTypes, "Id", "Name", question.QuestionTypeId);
-
-            var model = new QuestionDto
+            var question = _context.Questions.FirstOrDefault(q => q.Id == id);
+            if (question == null)
             {
-                SurveyId = id.Value
-            };
-
-            return View(question);
-        }
-
-        // POST: Questions/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, QuestionDto questionDto)
-        {
-            if (id != questionDto.SurveyId) return NotFound();
-
-            if (ModelState.IsValid)
-            {
-
-                var question = new QuestionModel
-                {
-                    QuestionText = questionDto.QuestionText,
-                    QuestionTypeId = questionDto.QuestionTypeId,
-                    SurveyId = questionDto.SurveyId
-                };
-
-                _context.Update(question);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Surveys", new { id = questionDto.SurveyId });
+                return NotFound();
             }
 
-            ViewData["QuestionTypeId"] = new SelectList(_context.QuestionTypes, "Id", "Name", questionDto.QuestionTypeId);
+            var questionDto = new QuestionDto
+            {
+                Id = question.Id,
+                QuestionText = question.QuestionText,
+                QuestionTypeId = question.QuestionTypeId
+            };
+
+            ViewBag.QuestionTypes = new SelectList(_context.QuestionTypes, "Id", "Name", question.QuestionTypeId);
             return View(questionDto);
         }
 
-        // GET: Questions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [HttpPost]
+        public IActionResult Edit(QuestionDto questionDto)
         {
-            if (id == null) return NotFound();
-
-            var question = await _context.Questions
-                .Include(q => q.Survey)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (question == null) return NotFound();
-
-            return View(question);
-        }
-
-        // POST: Questions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var question = await _context.Questions.FindAsync(id);
-            if (question != null)
+            if (ModelState.IsValid)
             {
-                _context.Questions.Remove(question);
-                await _context.SaveChangesAsync();
+                var question = _context.Questions.Find(questionDto.Id);
+                if (question == null)
+                {
+                    return NotFound();
+                }
+
+                question.QuestionText = questionDto.QuestionText;
+                question.QuestionTypeId = questionDto.QuestionTypeId;
+
+                _context.SaveChanges();
+                return RedirectToAction("Details", "Survey", new { id = question.SurveyId });
             }
 
-            return RedirectToAction("Details", "Surveys", new { id = question?.SurveyId });
+            ViewBag.QuestionTypes = new SelectList(_context.QuestionTypes, "Id", "Name", questionDto.QuestionTypeId);
+            return View(questionDto);
         }
+
+        public IActionResult Delete(int id)
+        {
+            var question = _context.Questions.Find(id);
+            if (question == null)
+            {
+                return NotFound();
+            }
+
+            _context.Questions.Remove(question);
+            _context.SaveChanges();
+
+            return RedirectToAction("Details", "Survey", new { id = question.SurveyId });
+        }
+
+        public IActionResult EditOption(int id)
+        {
+            var option = _context.Options.FirstOrDefault(o => o.Id == id);
+            if (option == null)
+            {
+                return NotFound();
+            }
+
+            var optionDto = new OptionDto
+            {
+                Id = option.Id,
+                OptionText = option.OptionText,
+                QuestionId = option.QuestionId
+            };
+
+            return View(optionDto);
+        }
+
+        [HttpPost]
+        public IActionResult EditOption(OptionDto optionDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var option = _context.Options.Find(optionDto.Id);
+                if (option == null)
+                {
+                    return NotFound();
+                }
+
+                option.OptionText = optionDto.OptionText;
+
+                _context.SaveChanges();
+                return RedirectToAction("Details", "Questions", new { id = optionDto.QuestionId });
+            }
+
+            return View(optionDto);
+        }
+
+        public IActionResult DeleteOption(int id)
+        {
+            var option = _context.Options.Find(id);
+            if (option == null)
+            {
+                return NotFound();
+            }
+
+            var questionId = option.QuestionId;
+            _context.Options.Remove(option);
+            _context.SaveChanges();
+
+            return RedirectToAction("Details", "Questions", new { id = questionId });
+        }
+
     }
 
 }

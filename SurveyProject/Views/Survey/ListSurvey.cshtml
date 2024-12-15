@@ -1,4 +1,5 @@
-﻿<div class="container mt-4">
+﻿@model IEnumerable<SurveyModel>
+<div class="container mt-4">
 
     <h3 class="mb-4">List Survey</h3>
 
@@ -11,13 +12,14 @@
             </tr>
         </thead>
         <tbody>
+            @foreach (var item in Model)
+		    {
                 <tr>
-                    <th scope="row">1</th>
-                    <td>test</td>
-                    <td>test</td>
-
+                    <th scope="row">@item.Id</th>
+                    <td><a asp-action="SurveyDetails" asp-route-id="@item.Id">@item.Title</a></td>
+                    <td>@item.ExpiredDate</td>
                 </tr>
-            
+            }
         </tbody>
     </table>
 </div>
