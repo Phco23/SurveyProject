@@ -58,10 +58,12 @@
                 <a asp-controller="Home" asp-action="Index" class="nav-item nav-link">Home</a>
                 <a asp-controller="Contact" asp-action="Index" class="nav-item nav-link">Contact</a>
                 <a asp-controller="Survey" asp-action="ListSurvey" class="nav-item nav-link">Survey</a>
-                <a asp-controller="Survey" asp-action="ListSurvey" class="nav-item nav-link">Edit Profiles</a>
+                <a asp-controller="Home" asp-action="EditProfiles" asp-route-userId="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" class="nav-item nav-link">
+                    Edit Profiles
+                </a>
                 <a asp-controller="FAQ" asp-action="FAQ" class="nav-item nav-link">FAQ</a>
-
             </div>
+
             @if (User.Identity?.IsAuthenticated ?? false)
             {
                 <a asp-controller="Account" asp-action="Logout" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Hi, @User.Identity.Name, Logout<i class="fa fa-arrow-right ms-3"></i></a>

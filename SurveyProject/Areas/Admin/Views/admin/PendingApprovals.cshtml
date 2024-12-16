@@ -1,12 +1,13 @@
-﻿@model IEnumerable<IdentityUserModel>
+﻿@model List<SurveyProject.Models.IdentityUserModel>
 
-<h2>Danh sách tài khoản chờ phê duyệt</h2>
-<table>
+<h1>Pending Approvals</h1>
+
+<table class="table">
     <thead>
         <tr>
-            <th>Login name</th>
+            <th>Username</th>
             <th>Email</th>
-            <th>Status</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -16,13 +17,14 @@
                 <td>@user.UserName</td>
                 <td>@user.Email</td>
                 <td>
-                    <form asp-action="ApproveUser" method="post">
+                    <a asp-action="EditProfiles" asp-route-userId="@user.Id" class="btn btn-primary btn-sm">Edit Profile</a>
+                    <form asp-action="ApproveUser" method="post" style="display:inline;">
                         <input type="hidden" name="userId" value="@user.Id" />
-                        <button type="submit">Duyệt</button>
+                        <button type="submit" class="btn btn-success btn-sm">Approve</button>
                     </form>
-                    <form asp-action="RejectUser" method="post">
+                    <form asp-action="RejectUser" method="post" style="display:inline;">
                         <input type="hidden" name="userId" value="@user.Id" />
-                        <button type="submit">Không duyệt</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
                     </form>
                 </td>
             </tr>
