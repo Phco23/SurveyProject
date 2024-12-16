@@ -20,6 +20,11 @@ namespace SurveyProject.Controllers
         {
             return View();
         }
+
+        public IActionResult SurveySubmitted()
+        {
+            return View();
+        }
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> SubmitSurvey(IFormCollection form)

@@ -11,5 +11,6 @@ namespace SurveyProject.Models
         public DateTime SubmittedDate { get; set; }
         public SurveyModel Survey { get; set; }
         public IdentityUserModel User { get; set; }
+
     }
 }

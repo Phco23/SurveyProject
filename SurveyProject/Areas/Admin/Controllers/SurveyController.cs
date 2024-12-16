@@ -37,6 +37,20 @@ namespace SurveyProject.Areas.Admin.Controllers
             return View(survey);
         }
 
+        /*public async Task<IActionResult> Responses(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var survey = await _dataContext.Surveys
+                .Include(s => s.Responses)
+                .ThenInclude(q => q.ResponseDetails)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (survey == null) return NotFound();
+
+            return View(survey);
+        }*/
+
         // GET: Surveys/Create
         public IActionResult Create()
         {
