@@ -1,0 +1,77 @@
+﻿@model LoginViewModel
+
+<div class="container-fluid bg-primary py-5 mb-5 page-header">
+	<div class="container py-5">
+		<div class="row justify-content-center">
+			<div class="col-lg-10 text-center">
+				<h1 class="display-3 text-white animated slideInDown">Login</h1>
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb justify-content-center">
+						<li class="breadcrumb-item"><a class="text-white" href="#">Home</a></li>
+						<li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
+						<li class="breadcrumb-item text-white active" aria-current="page">Login</li>
+					</ol>
+				</nav>
+			</div>
+		</div>
+	</div>
+</div>
+<section id="login-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-sm-6">
+                <div class="login-form p-4 shadow-sm rounded bg-light">
+                    <h2 class="text-center mb-4">Login</h2>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <form asp-action="Login" asp-controller="Account">
+                        <!-- Username -->
+                        <div class="form-group mb-4">
+                            <label for="UserName" class="form-label">Username</label>
+                            <div class="input-group">
+                                <div class="input-group-text">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                <input asp-for="UserName" id="UserName" class="form-control" placeholder="Enter your username" />
+                            </div>
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group mb-4">
+                            <label for="Password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <div class="input-group-text">
+                                    <i class="bi bi-lock"></i>
+                                </div>
+                                <input asp-for="Password" id="Password" type="password" class="form-control" placeholder="Enter your password" />
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <!-- Remember me -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <!-- Remember Me -->
+                            <div class="form-check">
+                                <input asp-for="RememberLogin" id="RememberLogin" type="checkbox" class="form-check-input" />
+                                <label for="RememberLogin" class="form-check-label">Remember me</label>
+                            </div>
+
+                            <!-- Forgot Password -->
+                            <a asp-action="ForgetPass" asp-controller="Account" class="text-primary small">Forget Password?</a>
+                        </div>
+
+
+                        <!-- Buttons -->
+                        <div class="d-flex flex-column gap-3">
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                            <div class="text-center mt-3">
+                                <span>Don't have an account? </span>
+                                <a asp-action="Create" asp-controller="Account" class="text-primary fw-bold">Create Account</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

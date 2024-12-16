@@ -1,112 +1,47 @@
-﻿<ul class="box-info">
-	<li>
-		<i class="bx bxs-calendar-check"></i>
-		<span class="text">
-			<h3>1020</h3>
-			<p>New Order</p>
-		</span>
-	</li>
-	<li>
-		<i class="bx bxs-group"></i>
-		<span class="text">
-			<h3>2834</h3>
-			<p>Visitors</p>
-		</span>
-	</li>
-	<li>
-		<i class="bx bxs-dollar-circle"></i>
-		<span class="text">
-			<h3>$2543</h3>
-			<p>Total Sales</p>
-		</span>
-	</li>
-</ul>
-<div class="table-data">
-	<div class="order">
-		<div class="head">
-			<h3>Recent Orders</h3>
-			<i class="bx bx-search"></i>
-			<i class="bx bx-filter"></i>
-		</div>
-		<table>
-			<thead>
-				<tr>
-					<th>User</th>
-					<th>Date Order</th>
-					<th>Status</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>
-						<img src="img/people.png">
-						<p>John Doe</p>
-					</td>
-					<td>01-10-2021</td>
-					<td><span class="status completed">Completed</span></td>
-				</tr>
-				<tr>
-					<td>
-						<img src="img/people.png">
-						<p>John Doe</p>
-					</td>
-					<td>01-10-2021</td>
-					<td><span class="status pending">Pending</span></td>
-				</tr>
-				<tr>
-					<td>
-						<img src="img/people.png">
-						<p>John Doe</p>
-					</td>
-					<td>01-10-2021</td>
-					<td><span class="status process">Process</span></td>
-				</tr>
-				<tr>
-					<td>
-						<img src="img/people.png">
-						<p>John Doe</p>
-					</td>
-					<td>01-10-2021</td>
-					<td><span class="status pending">Pending</span></td>
-				</tr>
-				<tr>
-					<td>
-						<img src="img/people.png">
-						<p>John Doe</p>
-					</td>
-					<td>01-10-2021</td>
-					<td><span class="status completed">Completed</span></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-	<div class="todo">
-		<div class="head">
-			<h3>Todos</h3>
-			<i class="bx bx-plus"></i>
-			<i class="bx bx-filter"></i>
-		</div>
-		<ul class="todo-list">
-			<li class="completed">
-				<p>Todo List</p>
-				<i class="bx bx-dots-vertical-rounded"></i>
-			</li>
-			<li class="completed">
-				<p>Todo List</p>
-				<i class="bx bx-dots-vertical-rounded"></i>
-			</li>
-			<li class="not-completed">
-				<p>Todo List</p>
-				<i class="bx bx-dots-vertical-rounded"></i>
-			</li>
-			<li class="completed">
-				<p>Todo List</p>
-				<i class="bx bx-dots-vertical-rounded"></i>
-			</li>
-			<li class="not-completed">
-				<p>Todo List</p>
-				<i class="bx bx-dots-vertical-rounded"></i>
-			</li>
-		</ul>
-	</div>
+﻿@model IEnumerable<SurveyModel>
+
+<div class="container mt-4">
+    <h3 class="mb-4">List Survey</h3>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <a asp-action="Create" asp-controller="Survey" class="btn btn-primary">Add Survey</a>
+    </div>
+    <table class="table table-hover table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Survey Title</th>
+                <th scope="col">Survey Description</th>
+                <th scope="col">Created Date</th>
+                <th scope="col">Expired Date</th>
+                <th scope="col">Survey Role</th>
+                <th scope="col">Total Responses</th>
+                <th scope="col">Is Active</th>
+                <th scope="col" class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">@item.Id</th>
+                    <td>@item.Title</td>
+                    <td>@item.Description</td>
+                    <td>@item.CreatedDate.ToString("MM/dd/yyyy")</td>
+                    <td>@item.ExpiredDate.ToString("MM/dd/yyyy")</td>
+                    <td>@item.RoleId</td>
+                    <td>@item.TotalResponses</td>
+                    <td>
+                        <span class="badge @((item.IsActive) ? "bg-success" : "bg-danger")">
+                            @(item.IsActive ? "Active" : "Inactive")
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="Edit" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-warning me-1">Edit</a>
+                        <a asp-action="Details" asp-controller="Survey" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1">Details</a>
+                        <a asp-action="Delete" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

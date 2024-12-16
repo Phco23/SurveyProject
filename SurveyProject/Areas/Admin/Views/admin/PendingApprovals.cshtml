@@ -1,0 +1,31 @@
+﻿@model IEnumerable<IdentityUserModel>
+
+<h2>Danh sách tài khoản chờ phê duyệt</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Login name</th>
+            <th>Email</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    <form asp-action="ApproveUser" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit">Duyệt</button>
+                    </form>
+                    <form asp-action="RejectUser" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit">Không duyệt</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

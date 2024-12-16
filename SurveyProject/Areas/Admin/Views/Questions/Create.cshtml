@@ -1,0 +1,36 @@
+﻿@using SurveyProject.MappingProfiles
+@model QuestionDto
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h4 class="text-center fw-bold mb-4">Create Question</h4>
+            <form asp-action="Create" method="post" class="shadow p-4 rounded bg-light">
+                <div class="form-group mb-3">
+                    <label asp-for="SurveyId" class="form-label">Survey ID</label>
+                    <input asp-for="SurveyId" class="form-control" readonly />
+                    <span asp-validation-for="SurveyId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="QuestionText" class="form-label">Question Text</label>
+                    <textarea asp-for="QuestionText" class="form-control" rows="4" placeholder="Enter the question text"></textarea>
+                    <span asp-validation-for="QuestionText" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="QuestionTypeId" class="form-label">Question Type</label>
+                    <select asp-for="QuestionTypeId" class="form-select" asp-items="ViewBag.QuestionTypeId">
+                        <option value="" disabled selected>Select a question type</option>
+                    </select>
+                    <span asp-validation-for="QuestionTypeId" class="text-danger"></span>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary px-4 me-2">Submit</button>
+                    <a asp-action="Details" asp-controller="Survey" asp-route-id="@Model.SurveyId" class="btn btn-secondary px-4">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

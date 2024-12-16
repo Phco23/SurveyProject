@@ -155,6 +155,27 @@ namespace SurveyProject.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("SurveyProject.Models.FAQModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Tittle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FAQs");
+                });
+
             modelBuilder.Entity("SurveyProject.Models.IdentityUserModel", b =>
                 {
                     b.Property<string>("Id")
@@ -172,6 +193,9 @@ namespace SurveyProject.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
@@ -198,7 +222,6 @@ namespace SurveyProject.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("RoleId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
@@ -233,7 +256,6 @@ namespace SurveyProject.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("OptionText")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("QuestionId")
@@ -282,7 +304,6 @@ namespace SurveyProject.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -299,10 +320,9 @@ namespace SurveyProject.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AnswerText")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OptionId")
+                    b.Property<int?>("OptionId")
                         .HasColumnType("int");
 
                     b.Property<int>("QuestionId")
@@ -336,13 +356,14 @@ namespace SurveyProject.Migrations
                     b.Property<int>("SurveyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SurveyId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Responses");
                 });
@@ -355,23 +376,26 @@ namespace SurveyProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("DateTime")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiredDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("RoleId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TotalResponses")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -432,7 +456,7 @@ namespace SurveyProject.Migrations
             modelBuilder.Entity("SurveyProject.Models.OptionModel", b =>
                 {
                     b.HasOne("SurveyProject.Models.QuestionModel", "Question")
-                        .WithMany()
+                        .WithMany("Options")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -449,7 +473,7 @@ namespace SurveyProject.Migrations
                         .IsRequired();
 
                     b.HasOne("SurveyProject.Models.SurveyModel", "Survey")
-                        .WithMany()
+                        .WithMany("Questions")
                         .HasForeignKey("SurveyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -464,8 +488,7 @@ namespace SurveyProject.Migrations
                     b.HasOne("SurveyProject.Models.OptionModel", "Option")
                         .WithMany()
                         .HasForeignKey("OptionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SurveyProject.Models.QuestionModel", "Question")
                         .WithMany()
@@ -494,7 +517,23 @@ namespace SurveyProject.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SurveyProject.Models.IdentityUserModel", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Survey");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SurveyProject.Models.QuestionModel", b =>
+                {
+                    b.Navigation("Options");
+                });
+
+            modelBuilder.Entity("SurveyProject.Models.SurveyModel", b =>
+                {
+                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }

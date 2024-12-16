@@ -1,0 +1,66 @@
+﻿@model SurveyModel
+
+
+    <div class="row mb-5">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Survey Information</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Title:</strong> @Model.Title</p>
+                    <p><strong>Description:</strong> @Model.Description</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col text-center">
+            <h3 class="fw-bold">Questions</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <table class="table table-striped table-bordered shadow-sm">
+                <thead class="table-primary">
+                    <tr>
+                        <th scope="col">Question Name</th>
+                        <th scope="col">Question Type</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Questions.Any())
+                    {
+                        @foreach (var question in Model.Questions)
+                        {
+                            <tr>
+                                <td>@question.QuestionText</td>
+                                <td>@question.QuestionType.Name</td>
+                                <td>
+                                    <a asp-controller="Questions" asp-action="Edit" asp-route-id="@question.Id" class="btn btn-sm btn-warning">Edit</a>
+                                    <a asp-controller="Questions" asp-action="Details" asp-route-id="@question.Id" class="btn btn-sm btn-warning">Details</a>
+                                    <a asp-controller="Questions" asp-action="Delete" asp-route-id="@question.Id" class="btn btn-sm btn-danger ms-2">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">No questions available.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col text-center">
+            <a asp-controller="Questions" asp-action="Create" asp-route-surveyId="@Model.Id" class="btn btn-success px-4">Add Question</a>
+        </div>
+    </div>
+</div>
