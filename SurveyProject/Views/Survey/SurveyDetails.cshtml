@@ -26,7 +26,7 @@
                                 <div class="card p-3 border-0 shadow-sm w-100">
                                     <p class="fw-bold">@($"{qIndex + 1}. {question.QuestionText}")</p>
 
-                                    @if (question.QuestionType == "Radio Button")
+                                    @if (question.QuestionType == "Single Choice")
                                     {
                                         @for (int oIndex = 0; oIndex < question.Options.Count; oIndex++)
                                         {
@@ -37,7 +37,7 @@
                                             </div>
                                         }
                                     }
-                                    else if (question.QuestionType == "Checkbox")
+                                    else if (question.QuestionType == "Multiple Choice")
                                     {
                                         @for (int oIndex = 0; oIndex < question.Options.Count; oIndex++)
                                         {
