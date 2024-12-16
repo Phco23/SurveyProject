@@ -59,6 +59,8 @@
                 <a asp-controller="Contact" asp-action="Index" class="nav-item nav-link">Contact</a>
                 <a asp-controller="Survey" asp-action="ListSurvey" class="nav-item nav-link">Survey</a>
                 <a asp-controller="Survey" asp-action="ListSurvey" class="nav-item nav-link">Edit Profiles</a>
+                <a asp-controller="FAQ" asp-action="FAQ" class="nav-item nav-link">FAQ</a>
+
             </div>
             @if (User.Identity?.IsAuthenticated ?? false)
             {
