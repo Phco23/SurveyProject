@@ -15,6 +15,8 @@
 	<!-- Customized Bootstrap Stylesheet -->
 	<link href="/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 
 
 
@@ -30,15 +32,13 @@
 			<span class="text">AdminHub</span>
 		</a>
 		<ul class="side-menu top">
-			<li class="active">
-				<a href="#">
-					<i class='bx bxs-dashboard'></i>
-					<span class="text">Dashboard Account</span>
+
+
+			<li class="nav-item">
+				<a asp-area="Admin" asp-controller="Admin" asp-action="ManageUsers" class="nav-link">
+					<i class="fa fa-users me-2"></i> Manage Users
 				</a>
 			</li>
-
-			<!-- Liên kết tới Manage Users trong admin menu -->
-			<a asp-area="Admin" asp-controller="Admin" asp-action="ManageUsers" class="nav-item nav-link">Manage Users</a>
 
 			<li>
 				<a href="#">
@@ -58,7 +58,6 @@
 					<span class="text">PendingApprovals</span>
 				</a>
 			</li>
-
 
 			<li>
 				<a asp-action="Index" asp-controller="Survey">

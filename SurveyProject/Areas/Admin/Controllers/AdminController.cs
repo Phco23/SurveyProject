@@ -57,16 +57,16 @@ namespace SurveyProject.Areas.Admin.Controllers
         {
             if (string.IsNullOrEmpty(userId))
             {
-                return NotFound(); // Nếu userId rỗng, trả về lỗi 404
+                return NotFound(); 
             }
 
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
-                return NotFound(); // Nếu không tìm thấy user, trả về lỗi 404
+                return NotFound(); 
             }
 
-            return View(user); // Trả về View với model là user
+            return View(user); 
         }
 
 
@@ -81,7 +81,6 @@ namespace SurveyProject.Areas.Admin.Controllers
                     return NotFound();
                 }
 
-                // Cập nhật thông tin
                 user.IsApproved = model.IsApproved;
                 user.UserName = model.UserName;
                 user.Email = model.Email;
@@ -91,7 +90,7 @@ namespace SurveyProject.Areas.Admin.Controllers
                 if (result.Succeeded)
                 {
                     TempData["SuccessMessage"] = "Profile updated successfully!";
-                    return RedirectToAction("PendingApprovals"); // Hoặc bất kỳ trang nào phù hợp
+                    return RedirectToAction("PendingApprovals"); 
                 }
 
                 foreach (var error in result.Errors)
@@ -105,9 +104,8 @@ namespace SurveyProject.Areas.Admin.Controllers
 
         public async Task<IActionResult> ManageUsers()
         {
-            // Lấy danh sách các tài khoản đã được duyệt
             var users = await _userManager.Users
-                .Where(u => u.IsApproved == true) // Lọc theo những tài khoản đã được duyệt
+                .Where(u => u.IsApproved == true) 
                 .ToListAsync();
 
             return View(users); 

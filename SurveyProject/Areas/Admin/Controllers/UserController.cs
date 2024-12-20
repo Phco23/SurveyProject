@@ -67,13 +67,11 @@ namespace SurveyProject.Areas.Admin.Controllers
 
                 var oldRoles = await _userManager.GetRolesAsync(existingUser);
 
-                // Remove existing roles
                 foreach (var role in oldRoles)
                 {
                     await _userManager.RemoveFromRoleAsync(existingUser, role);
                 }
 
-                // Add new role
                 var newRole = await _roleManager.FindByIdAsync(user.RoleId);
                 if (newRole != null)
                 {
@@ -117,8 +115,59 @@ namespace SurveyProject.Areas.Admin.Controllers
             {
                 return View("Error");
             }
-            TempData["success"] = "user delte ok";
+            TempData["success"] = "user delete ok";
             return RedirectToAction("Index");
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            var roles = await _roleManager.Roles.ToListAsync();
+            ViewBag.Roles = new SelectList(roles, "Id", "Name");
+            return View(new IdentityUserModel());
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(IdentityUserModel model, string RoleId)
+        {
+            if (ModelState.IsValid)
+            {
+                var newUser = new IdentityUserModel
+                {
+                    UserName = model.UserName,
+                    Email = model.Email
+                };
+
+                var createResult = await _userManager.CreateAsync(newUser, "Default@123"); // mk mac dinh ///+
+
+                if (createResult.Succeeded)
+                {
+                    var role = await _roleManager.FindByIdAsync(RoleId);
+                    if (role != null)
+                    {
+                        await _userManager.AddToRoleAsync(newUser, role.Name);
+                    }
+
+                    TempData["success"] = "User created successfully!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    foreach (var error in createResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+
+            var roles = await _roleManager.Roles.ToListAsync();
+            ViewBag.Roles = new SelectList(roles, "Id", "Name");
+            return View(model);
+        }
+
     }
 }
