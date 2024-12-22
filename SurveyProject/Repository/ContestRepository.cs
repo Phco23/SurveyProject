@@ -1,10 +1,10 @@
-﻿using SurveyProject.Migrations;
+using SurveyProject.Migrations;
 using SurveyProject.Models;
 using System;
 
 namespace SurveyProject.Repository
 {
-    public class ContestRepository : IContestRepository
+    public class ContestRepository : IWinnerRepository
     {
         private readonly SurveyDbContext _context;
 
