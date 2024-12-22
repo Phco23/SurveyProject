@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using SurveyProject.Models;
 using SurveyProject.Repository;
 using System;
+using System.Reflection;
 
 namespace SurveyProject.Controllers
 {
@@ -9,35 +10,33 @@ namespace SurveyProject.Controllers
     [Route("api/[controller]")]
     public class ContestsController : ControllerBase
     {
-        private readonly IContestService _contestService;
+        private readonly IWinnerService _contestService;
 
-        public ContestsController(IContestService contestService)
+        public ContestsController(IWinnerService contestService)
         {
             _contestService = contestService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddContest([FromBody] ContestModel contest)
+        // Add a winner to a contest
+        [HttpPost("{contestId}/winners")]
+        public async Task<IActionResult> AddWinner(int contestId, [FromBody] WinnerModel winner)
         {
-            if (contest == null)
+            if (winner == null)
             {
-                return BadRequest("Contest data is required.");
+                return BadRequest("Winner data is required.");
             }
 
-            var createdContest = await _contestService.AddContestAsync(contest);
-            return CreatedAtAction(nameof(GetContestById), new { id = createdContest.Id }, createdContest);
+            winner.ContestId = contestId;
+            var createdWinner = await _contestService.AddWinnerAsync(winner);
+            return CreatedAtAction(nameof(GetWinnersByContestId), new { contestId = contestId }, createdWinner);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetContestById(int id)
+        // Get winners of a contest
+        [HttpGet("{contestId}/winners")]
+        public async Task<IActionResult> GetWinnersByContestId(int contestId)
         {
-            var contest = await _contestService.GetContestByIdAsync(id);
-            if (contest == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(contest);
+            var winners = await _contestService.GetWinnersByContestIdAsync(contestId);
+            return Ok(winners);
         }
     }
 }
