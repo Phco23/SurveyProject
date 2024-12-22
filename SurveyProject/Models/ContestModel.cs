@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
+using System.Reflection;
 
 namespace SurveyProject.Models
 {
@@ -10,5 +11,8 @@ namespace SurveyProject.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public bool IsActive { get; set; }
+
+        // New property for contest winners
+        public ICollection<WinnerModel> Winners { get; set; } = new List<WinnerModel>();
     }
 }
