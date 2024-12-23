@@ -1,5 +1,6 @@
-﻿using SurveyProject.Models;
-using System;
+using SurveyProject.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SurveyProject.Repository
 {
@@ -7,5 +8,8 @@ namespace SurveyProject.Repository
     {
         Task<ContestModel> AddContestAsync(ContestModel contest);
         Task<ContestModel?> GetContestByIdAsync(int id);
+        Task<WinnerModel> AddWinnerAsync(WinnerModel winner);
+        Task<WinnerModel?> GetWinnerByIdAsync(int id);
+        Task<IEnumerable<WinnerModel>> GetWinnersByContestIdAsync(int contestId);
     }
 }
