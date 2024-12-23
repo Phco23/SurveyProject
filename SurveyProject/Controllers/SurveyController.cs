@@ -196,20 +196,21 @@ namespace SurveyProject.Controllers
 
         public async Task<IActionResult> ListSurvey()
         {
-            var surveys = await _context.Surveys
-                .Where(s => s.IsActive && s.ExpiredDate >= DateTime.UtcNow)
-                .Select(s => new SurveyViewModel
-                {
-                    SurveyId = s.Id,
-                    Title = s.Title,
-                    Description = s.Description,
-                    ExpiredDate = s.ExpiredDate,
-                    IsActive = s.IsActive
-                })
-                .ToListAsync();
+            var surveys = await _context.Surveys.ToListAsync();
 
-            return View(surveys);
+            // Convert SurveyModel to SurveyViewModel
+            var surveyViewModels = surveys.Select(s => new SurveyViewModel
+            {
+                SurveyId = s.Id,
+                Title = s.Title,
+                Description = s.Description,
+                ExpiredDate = s.ExpiredDate,
+                IsActive = s.IsActive
+            }).ToList();
+
+            return View(surveyViewModels);
         }
+
 
     }
 }

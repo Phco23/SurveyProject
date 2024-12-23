@@ -14,7 +14,6 @@
                 <th scope="col">Created Date</th>
                 <th scope="col">Expired Date</th>
                 <th scope="col">Survey Role</th>
-                <th scope="col">Total Responses</th>
                 <th scope="col">Is Active</th>
                 <th scope="col" class="text-center">Actions</th>
             </tr>
@@ -29,7 +28,6 @@
                     <td>@item.CreatedDate.ToString("MM/dd/yyyy")</td>
                     <td>@item.ExpiredDate.ToString("MM/dd/yyyy")</td>
                     <td>@item.RoleId</td>
-                    <td>@item.TotalResponses</td>
                     <td>
                         <span class="badge @((item.IsActive) ? "bg-success" : "bg-danger")">
                             @(item.IsActive ? "Active" : "Inactive")
@@ -39,7 +37,7 @@
                         <a asp-action="Edit" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-warning me-1">Edit</a>
                         <a asp-action="Details" asp-controller="Survey" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1">Details</a>
                         <a asp-action="Delete" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
-                        <a asp-action="Responses" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-success">Responses</a>
+                        <a asp-action="SurveyResponses" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-success">Responses</a>
                     </td>
                 </tr>
             }

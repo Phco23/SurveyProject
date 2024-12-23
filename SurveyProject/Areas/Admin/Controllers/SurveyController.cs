@@ -61,7 +61,7 @@ namespace SurveyProject.Areas.Admin.Controllers
                 .Where(rd => rd.Question.SurveyId == surveyId)
                 .ToListAsync();
 
-            var responseSummary = survey.Questions.Select(question => new
+            var responseSummary = survey.Questions.Select(question => new   
             {
                 QuestionText = question.QuestionText,
                 QuestionTypeId = question.QuestionTypeId,
