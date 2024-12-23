@@ -19,6 +19,8 @@
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 
     <!-- Libraries Stylesheet -->
     <link href="/lib/animate/animate.min.css" rel="stylesheet">
@@ -58,8 +60,12 @@
                 <a asp-controller="Home" asp-action="Index" class="nav-item nav-link">Home</a>
                 <a asp-controller="Contact" asp-action="Index" class="nav-item nav-link">Contact</a>
                 <a asp-controller="Survey" asp-action="ListSurvey" class="nav-item nav-link">Survey</a>
-                <a asp-controller="Survey" asp-action="ListSurvey" class="nav-item nav-link">Edit Profiles</a>
+                <a asp-controller="Home" asp-action="EditProfiles" asp-route-userId="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" class="nav-item nav-link">
+                    Edit Profiles
+                </a>
+                <a asp-controller="FAQ" asp-action="FAQ" class="nav-item nav-link">FAQ</a>
             </div>
+
             @if (User.Identity?.IsAuthenticated ?? false)
             {
                 <a asp-controller="Account" asp-action="Logout" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Hi, @User.Identity.Name, Logout<i class="fa fa-arrow-right ms-3"></i></a>
