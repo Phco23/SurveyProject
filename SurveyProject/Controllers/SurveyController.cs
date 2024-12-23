@@ -20,11 +20,6 @@ namespace SurveyProject.Controllers
         {
             return View();
         }
-
-        public IActionResult SurveySubmitted()
-        {
-            return View();
-        }
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> SubmitSurvey(IFormCollection form)
@@ -70,7 +65,7 @@ namespace SurveyProject.Controllers
                     continue;
                 }
 
-                if (question.QuestionType.Name == "Radio Button" || question.QuestionType.Name == "Checkbox")
+                if (question.QuestionType.Name == "Single Choice" || question.QuestionType.Name == "Multiple Choice")
                 {
                     // Handle choice-based questions
                     var optionIds = answers.Split(',')
