@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using System;
 
 namespace SurveyProject.Models
@@ -9,9 +9,5 @@ namespace SurveyProject.Models
         public string Name { get; set; } = string.Empty;
         public string RollNumber { get; set; } = string.Empty;
         public int ContestId { get; set; }
-
-        // Navigation property
-        public ContestModel Contest { get; set; } = null!;
     }
-
 }
