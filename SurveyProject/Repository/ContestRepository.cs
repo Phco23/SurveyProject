@@ -15,15 +15,14 @@ namespace SurveyProject.Repository
 
         public async Task<ContestModel> AddContestAsync(ContestModel contest)
         {
-            _context.contests.Add(contest);
+            _context.Contests.Add(contest);
             await _context.SaveChangesAsync();
             return contest;
         }
 
         public async Task<ContestModel?> GetContestByIdAsync(int id)
         {
-            return await _context.contests.FindAsync(id);
+            return await _context.Contests.FindAsync(id);
         }
     }
-
 }
