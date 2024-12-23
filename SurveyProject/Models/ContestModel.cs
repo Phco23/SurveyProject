@@ -6,13 +6,9 @@ namespace SurveyProject.Models
     public class ContestModel
     {
         public int Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public bool IsActive { get; set; }
-
-        // New property for contest winners
-        public ICollection<WinnerModel> Winners { get; set; } = new List<WinnerModel>();
     }
 }
