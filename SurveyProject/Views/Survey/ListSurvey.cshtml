@@ -1,25 +1,56 @@
-﻿@model IEnumerable<SurveyModel>
-<div class="container mt-4">
+﻿@model IEnumerable<SurveyProject.Models.ViewModels.SurveyViewModel>
 
+<div class="container mt-4">
     <h3 class="mb-4">List Survey</h3>
 
-    <table class="table table-hover table-bordered align-middle">
-        <thead class="table-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Survey Title</th>
-                <th scope="col">Expired Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-		    {
+    @if (!Model.Any())
+    {
+        <p class="text-center">No surveys are currently available.</p>
+    }
+    else
+    {
+        <table class="table table-hover table-bordered align-middle">
+            <thead class="table-dark">
                 <tr>
-                    <th scope="row">@item.Id</th>
-                    <td><a asp-action="SurveyDetails" asp-route-id="@item.Id">@item.Title</a></td>
-                    <td>@item.ExpiredDate</td>
+                    <th scope="col">#</th>
+                    <th scope="col">Survey Title</th>
+                    <th scope="col">Expired Date</th>
+                    <th scope="col">Status</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="@((item.ExpiredDate < DateTime.UtcNow || !item.IsActive) ? "table-danger" : "")">
+                        <th scope="row">@item.SurveyId</th>
+                        <td>
+                            @if (item.ExpiredDate >= DateTime.UtcNow && item.IsActive)
+                            {
+                                <a asp-action="SurveyDetails" asp-route-id="@item.SurveyId">@item.Title</a>
+                            }
+                            else
+                            {
+                                @item.Title
+                            }
+                        </td>
+                        <td>@item.ExpiredDate.ToString("MMMM dd, yyyy")</td>
+                        <td>
+                            @if (item.ExpiredDate < DateTime.UtcNow)
+                            {
+                                <span class="badge bg-danger">Expired</span>
+                            }
+                            else if (!item.IsActive)
+                            {
+                                <span class="badge bg-secondary">Inactive</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>

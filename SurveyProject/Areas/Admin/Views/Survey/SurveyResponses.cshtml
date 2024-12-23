@@ -1,0 +1,58 @@
+﻿@model SurveyProject.Models.ViewModels.SurveyResponseViewModel
+
+<h1>@ViewBag.SurveyTitle - Responses</h1>
+
+@foreach (var question in ViewBag.ResponseSummary)
+{
+    <h3>@question.QuestionText</h3>
+    <p><strong>Type:</strong> @question.QuestionTypeName</p>
+
+    @if (question.QuestionTypeName != "Text") // Check QuestionTypeName
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Responses</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var option in question.Options)
+                {
+                    <tr>
+                        <td>@option.OptionText</td>
+                        <td>@option.Count</td>
+                        <td>@option.Percentage.ToString("F2")%</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted">This question accepts text responses only. No percentage data is available.</p>
+    }
+
+    <h4>User Responses</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Selected Option</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var userResponse in question.UserResponses)
+            {
+                <tr>
+                    <td>@userResponse.UserName</td>
+                    <td>@userResponse.SelectedOption</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a asp-action="Index" class="btn btn-secondary">Back to Surveys</a>
+
