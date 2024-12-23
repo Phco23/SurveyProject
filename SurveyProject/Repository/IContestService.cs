@@ -4,9 +4,11 @@ using System;
 namespace SurveyProject.Repository
 {
     public interface IContestService
-    {
-        Task<ContestModel> AddContestAsync(ContestModel contest);
-        Task<ContestModel?> GetContestByIdAsync(int id);
-    }
-
+{
+    Task<ContestModel> AddContestAsync(ContestModel contest);
+    Task<ContestModel?> GetContestByIdAsync(int id);
+    Task<WinnerModel> AddWinnerAsync(WinnerModel winner);
+    Task<WinnerModel?> GetWinnerByIdAsync(int id);
+    Task<IEnumerable<WinnerModel>> GetWinnersByContestIdAsync(int contestId);
+}
 }
