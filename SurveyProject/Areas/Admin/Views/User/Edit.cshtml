@@ -2,7 +2,7 @@
 @{
     ViewData["title"] = "Edit User";
 }
-<h4>Create prodict</h4>
+<h4>Edit User </h4>
 <div class="col-md-9">
     <form asp-action="Edit" enctype="multipart/form-data">
         <input type="hidden" asp-for="Id" />
@@ -29,6 +29,7 @@
             </select>
             <span asp-validation-for="RoleId" class="text-danger" />
         </div>
+        <br />
         <div class="form-group">
             <button class=" btn btn-primary">Edit</button>
         </div>

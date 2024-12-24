@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SurveyProject.Models;
@@ -27,6 +28,9 @@ namespace SurveyProject
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.IsEssential = true;
             });
+
+
+
 
             builder.Services.AddIdentity<IdentityUserModel, IdentityRole>()
                .AddEntityFrameworkStores<DataContext>()

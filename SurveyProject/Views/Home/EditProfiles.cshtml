@@ -1,0 +1,53 @@
+﻿@model SurveyProject.Models.IdentityUserModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Edit Profile</h2>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <form asp-action="EditProfiles" method="post" class="needs-validation" novalidate>
+        <input type="hidden" asp-for="Id" />
+
+        <!-- User Name -->
+        <div class="mb-3">
+            <label asp-for="UserName" class="form-label fw-bold">Username</label>
+            <input asp-for="UserName" class="form-control"  />
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label fw-bold">Email</label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="currentPassword">Current Password</label>
+            <input type="password" name="currentPassword" id="currentPassword" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <input type="password" name="newPassword" id="newPassword" class="form-control" />
+        </div>
+
+        <!-- Is Approved -->
+        <div class="mb-3 form-check">
+            <input asp-for="IsApproved" type="checkbox" class="form-check-input" />
+            <label asp-for="IsApproved" class="form-check-label">Is Approved</label>
+        </div>
+
+        <!-- Save Changes Button -->
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+        </div>
+    </form>
+</div>

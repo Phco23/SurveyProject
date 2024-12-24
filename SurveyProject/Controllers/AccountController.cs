@@ -35,6 +35,14 @@ namespace SurveyProject.Controllers
 			return View();
 		}
 
+        [HttpGet]
+        public IActionResult AccessDenied(string returnUrl)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
+
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel LoginVM)
