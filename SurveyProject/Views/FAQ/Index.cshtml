@@ -1,0 +1,31 @@
+@model IEnumerable<SurveyProject.Models.FAQModel>
+@{
+    ViewBag.Title = "Frequently Asked Questions";
+}
+
+<div class="container mt-5">
+        <h1>Frequently Asked Questions</h1>
+        <div class="accordion" id="faqAccordion">
+            @foreach (var faq in Model)
+            {
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading-@faq.Id">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-@faq.Id" aria-expanded="false" aria-controls="collapse-@faq.Id">
+                            @faq.Tittle
+                        </button>
+                    </h2>
+                    <div id="collapse-@faq.Id" class="accordion-collapse collapse" aria-labelledby="heading-@faq.Id" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            <p>@faq.Content</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+</div>
+
+    
+
+    
+
+

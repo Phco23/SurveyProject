@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SurveyProject.Models;
@@ -19,6 +20,7 @@ namespace SurveyProject
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+
             builder.Services.AddDistributedMemoryCache();
 
             builder.Services.AddSession(options =>
@@ -27,8 +29,12 @@ namespace SurveyProject
                 options.Cookie.IsEssential = true;
             });
 
+
+
+
             builder.Services.AddIdentity<IdentityUserModel, IdentityRole>()
-                .AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
+               .AddEntityFrameworkStores<DataContext>()
+               .AddDefaultTokenProviders();
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
@@ -43,6 +49,8 @@ namespace SurveyProject
             });
 
             var app = builder.Build();
+
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
