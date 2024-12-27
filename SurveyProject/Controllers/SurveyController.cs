@@ -16,12 +16,19 @@ namespace SurveyProject.Controllers
         {
             _context = context;
         }
+
+
         public IActionResult Index()
         {
             return View();
         }
 
         public IActionResult SurveySubmitted()
+        {
+            return View();
+        }
+
+        public IActionResult SurveyInactive()
         {
             return View();
         }
@@ -118,6 +125,8 @@ namespace SurveyProject.Controllers
                 await _context.SaveChangesAsync();
             }
 
+
+
             // Redirect to a confirmation page
             return RedirectToAction("SurveySubmitted");
         }
@@ -126,6 +135,24 @@ namespace SurveyProject.Controllers
 
         public async Task<IActionResult> SurveyDetails(int id)
         {
+            // Get the logged-in user's ID
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(); // Ensure the user is authenticated
+
+            // Check if the user has already submitted the survey
+            var hasSubmitted = await _context.Responses
+                .AnyAsync(r => r.SurveyId == id && r.UserId == userId);
+
+            if (hasSubmitted)
+            {
+                // Redirect to a view informing the user that they've already submitted
+                ViewBag.Message = "You have already submitted this survey.";
+                return View("SurveySubmitted"); // A view to handle this scenario
+            }
+
+
+            // Fetch the survey details
             var survey = await _context.Surveys
                 .Include(s => s.Questions)
                 .ThenInclude(q => q.Options)
@@ -136,6 +163,12 @@ namespace SurveyProject.Controllers
             if (survey == null)
                 return NotFound();
 
+            if (!survey.IsActive || survey.ExpiredDate < DateTime.UtcNow)
+            {
+                return View("SurveyInactive"); // Create a similar view for inactive surveys
+            }
+
+            // Prepare the survey view model
             var viewModel = new SurveyViewModel
             {
                 SurveyId = survey.Id,
@@ -160,9 +193,24 @@ namespace SurveyProject.Controllers
         }
 
 
+
         public async Task<IActionResult> ListSurvey()
         {
-            return View(await _context.Surveys.ToListAsync());
+            var surveys = await _context.Surveys.ToListAsync();
+
+            // Convert SurveyModel to SurveyViewModel
+            var surveyViewModels = surveys.Select(s => new SurveyViewModel
+            {
+                SurveyId = s.Id,
+                Title = s.Title,
+                Description = s.Description,
+                ExpiredDate = s.ExpiredDate,
+                IsActive = s.IsActive
+            }).ToList();
+
+            return View(surveyViewModels);
         }
+
+
     }
 }

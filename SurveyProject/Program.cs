@@ -1,3 +1,4 @@
+using eLearning.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,9 @@ namespace SurveyProject
             });
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(); 
+
+            builder.Services.AddScoped<EmailService>();
 
 
             builder.Services.AddDistributedMemoryCache();

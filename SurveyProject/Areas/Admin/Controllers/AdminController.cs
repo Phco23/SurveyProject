@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SurveyProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using eLearning.Repository;
 
 
 namespace SurveyProject.Areas.Admin.Controllers
@@ -13,10 +14,12 @@ namespace SurveyProject.Areas.Admin.Controllers
     public class AdminController : Controller
     {
         private readonly UserManager<IdentityUserModel> _userManager;
+        private readonly EmailService _emailService;
 
-        public AdminController(UserManager<IdentityUserModel> userManager)
+        public AdminController(UserManager<IdentityUserModel> userManager, EmailService emailService)
         {
             _userManager = userManager;
+            _emailService = emailService;
         }
 
         public async Task<IActionResult> PendingApprovals()
@@ -35,6 +38,10 @@ namespace SurveyProject.Areas.Admin.Controllers
             {
                 user.IsApproved = true; // duyet tai khoan
                 await _userManager.UpdateAsync(user); // cap nhat thong tin ng dung
+                var subject = "Account Approved";
+                var body = $"Dear {user.UserName},<br><br>Your account have been approved, please login with the link below:<br><br><a>https://localhost:7072/Account/Login</a>";
+
+                await _emailService.SendEmailAsync(user.Email, subject, body);
                 return RedirectToAction("PendingApprovals");
             }
             return NotFound();
