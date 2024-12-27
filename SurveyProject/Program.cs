@@ -29,7 +29,9 @@ namespace SurveyProject
                 options.Cookie.IsEssential = true;
             });
 
-
+            // Add services to the container.
+            builder.Services.AddScoped<IContestRepository, ContestRepository>();
+            builder.Services.AddScoped<IContestService, ContestService>();
 
 
             builder.Services.AddIdentity<IdentityUserModel, IdentityRole>()
