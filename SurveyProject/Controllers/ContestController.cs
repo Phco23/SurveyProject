@@ -1,43 +1,59 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using SurveyProject.Models;
-using SurveyProject.Repository;
-using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace SurveyProject.Controllers
+[ApiController]
+[Route("api/[controller]")]
+public class ContestsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ContestsController : ControllerBase
+    private readonly IContestService _contestService;
+
+    public ContestsController(IContestService contestService)
     {
-        private readonly IContestService _contestService;
+        _contestService = contestService;
+    }
 
-        public ContestsController(IContestService contestService)
+    [HttpPost("add-contest")]
+    public async Task<IActionResult> AddContest([FromBody] ContestModel contest)
+    {
+        if (contest == null || string.IsNullOrWhiteSpace(contest.Title))
         {
-            _contestService = contestService;
+            return BadRequest("Invalid contest data.");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddContest([FromBody] ContestModel contest)
-        {
-            if (contest == null)
-            {
-                return BadRequest("Contest data is required.");
-            }
+        var createdContest = await _contestService.AddContestAsync(contest);
+        return CreatedAtAction(nameof(GetContestById), new { id = createdContest.Id }, createdContest);
+    }
 
-            var createdContest = await _contestService.AddContestAsync(contest);
-            return CreatedAtAction(nameof(GetContestById), new { id = createdContest.Id }, createdContest);
+    [HttpPost("add-winner")]
+    public async Task<IActionResult> AddWinner([FromBody] WinnerModel winner)
+    {
+        if (winner == null || string.IsNullOrWhiteSpace(winner.Name))
+        {
+            return BadRequest("Invalid winner data.");
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetContestById(int id)
-        {
-            var contest = await _contestService.GetContestByIdAsync(id);
-            if (contest == null)
-            {
-                return NotFound();
-            }
+        var createdWinner = await _contestService.AddWinnerAsync(winner);
+        return Ok(createdWinner);
+    }
 
-            return Ok(contest);
+    [HttpGet("winners/{contestId}")]
+    public async Task<IActionResult> GetWinners(int contestId)
+    {
+        var winners = await _contestService.GetWinnersByContestIdAsync(contestId);
+        if (winners == null)
+        {
+            return NotFound();
         }
+
+        return Ok(winners);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetContestById(int id)
+    {
+        // Add logic to retrieve a contest by ID if needed
+        return Ok();
     }
 }
