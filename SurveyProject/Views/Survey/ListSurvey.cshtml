@@ -1,56 +1,84 @@
 ﻿@model IEnumerable<SurveyProject.Models.ViewModels.SurveyViewModel>
 
 <div class="container mt-4">
-    <h3 class="mb-4">List Survey</h3>
-
     @if (!Model.Any())
     {
         <p class="text-center">No surveys are currently available.</p>
     }
     else
-    {
-        <table class="table table-hover table-bordered align-middle">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Survey Title</th>
-                    <th scope="col">Expired Date</th>
-                    <th scope="col">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr class="@((item.ExpiredDate < DateTime.UtcNow || !item.IsActive) ? "table-danger" : "")">
-                        <th scope="row">@item.SurveyId</th>
-                        <td>
-                            @if (item.ExpiredDate >= DateTime.UtcNow && item.IsActive)
-                            {
-                                <a asp-action="SurveyDetails" asp-route-id="@item.SurveyId">@item.Title</a>
-                            }
-                            else
-                            {
-                                @item.Title
-                            }
-                        </td>
-                        <td>@item.ExpiredDate.ToString("MMMM dd, yyyy")</td>
-                        <td>
-                            @if (item.ExpiredDate < DateTime.UtcNow)
-                            {
-                                <span class="badge bg-danger">Expired</span>
-                            }
-                            else if (!item.IsActive)
-                            {
-                                <span class="badge bg-secondary">Inactive</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-success">Active</span>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    {   
+        <!-- Active SURVEYS -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="section-title bg-white text-primary px-3">Active Surveys</h2>
+                </div>
+                <div class="row g-4">
+
+                    <!-- Survey Item 1 -->
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="card border-0 shadow-sm">
+                            <img class="img-fluid" src="/img/E_1.jpg" alt="image_Survey" loading="lazy" style="margin: 10px 10px 10px 10px;">
+                            <div class="card-body" style="background-color: #F9F9F9;margin: 10px 10px 10px 10px;">
+                                <h5 class="card-title">Survey 1</h5>
+                                <!-- Survey Details -->
+                                <div class="d-flex justify-content-between px-4">
+                                    <div class="left text-start">
+                                        <p class="mb-2">Questions</p>
+                                        <p class="mb-2">Time</p>
+                                        <p class="mb-2">Status</p>
+                                    </div>
+                                    <div class="right text-end">
+                                        <p class="mb-2">16</p>
+                                        <p class="mb-2">5 minutes</p>
+                                        <p class="mb-2 points " style="color: #28a745;">Active</p>
+                                    </div>
+                                </div>
+                                <a href="#" class="btn btn-primary" style="width: 100%;border-radius: 10px;">Participate Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- --- -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Expired SURVEYS -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="section-title bg-white text-primary px-3">Expired Surveys -></h2>
+                </div>
+                <div class="row g-4">
+
+                    <!-- Survey Item 1 -->
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <div class="card border-0 shadow-sm">
+                            <img class="img-fluid" src="/img/E_1.jpg" alt="image_Survey" loading="lazy" style="margin: 10px 10px 10px 10px;">
+                            <div class="card-body" style="background-color: #F9F9F9;margin: 10px 10px 10px 10px;">
+                                <h5 class="card-title">Survey 1</h5>
+                                <!-- Survey Details -->
+                                <div class="d-flex justify-content-between px-4">
+                                    <div class="left text-start">
+                                        <p class="mb-2">Questions</p>
+                                        <p class="mb-2">Time</p>
+                                        <p class="mb-2">Status</p>
+                                    </div>
+                                    <div class="right text-end">
+                                        <p class="mb-2">16</p>
+                                        <p class="mb-2">5 minutes</p>
+                                        <p class="mb-2 points " style="color: #ff0000;">Expired</p>
+                                    </div>
+                                </div>
+                                <a href="#" class="btn btn-primary" style="width: 100%;border-radius: 10px;" >Winner </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- --- -->
+                </div>
+            </div>
+        </div>
+
+        
     }
 </div>
