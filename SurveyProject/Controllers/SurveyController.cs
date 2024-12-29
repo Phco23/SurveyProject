@@ -138,7 +138,7 @@ namespace SurveyProject.Controllers
             // Get the logged-in user's ID
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
-                return Unauthorized(); // Ensure the user is authenticated
+                return Redirect("/Account/Login"); // Ensure the user is authenticated
 
             // Check if the user has already submitted the survey
             var hasSubmitted = await _context.Responses
