@@ -1,0 +1,29 @@
+﻿@model SurveyProject.Models.ViewModels.TextResponsePageViewModel
+
+<h1>@Model.SurveyTitle - Text Responses</h1>
+
+<h3>@Model.QuestionText</h3>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Response</th>
+            <th>Submitted On</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var response in Model.TextResponses)
+        {
+            <tr>
+                <td>@response.UserName</td>
+                <td>@response.TextAnswer</td>
+                <td>@response.SubmittedDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("SurveyResponses", "Survey", new { surveyId = Model.SurveyId })" class="btn btn-primary">
+    Back to Survey Responses
+</a>

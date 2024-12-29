@@ -1,13 +1,13 @@
 ﻿@model SurveyProject.Models.ViewModels.SurveyResponseViewModel
 
-<h1>@ViewBag.SurveyTitle - Responses</h1>
+<h1>@Model.SurveyTitle - Responses</h1>
 
-@foreach (var question in ViewBag.ResponseSummary)
+@foreach (var question in Model.ResponseSummary)
 {
     <h3>@question.QuestionText</h3>
     <p><strong>Type:</strong> @question.QuestionTypeName</p>
 
-    @if (question.QuestionTypeName != "Text") // Check QuestionTypeName
+    @if (question.QuestionTypeName != "Text")
     {
         <table class="table table-striped">
             <thead>
@@ -22,7 +22,11 @@
                 {
                     <tr>
                         <td>@option.OptionText</td>
-                        <td>@option.Count</td>
+                        <td>
+                            <a href="@Url.Action("ViewUsersForOption", "Survey", new { optionId = option.Id })">
+                                @option.Count
+                            </a>
+                        </td>
                         <td>@option.Percentage.ToString("F2")%</td>
                     </tr>
                 }
@@ -31,28 +35,8 @@
     }
     else
     {
-        <p class="text-muted">This question accepts text responses only. No percentage data is available.</p>
+        <a href="@Url.Action("ViewTextResponses", "Survey", new { questionId = question.QuestionId })" class="btn btn-info">
+            Details
+        </a>
     }
-
-    <h4>User Responses</h4>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>User</th>
-                <th>Selected Option</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var userResponse in question.UserResponses)
-            {
-                <tr>
-                    <td>@userResponse.UserName</td>
-                    <td>@userResponse.SelectedOption</td>
-                </tr>
-            }
-        </tbody>
-    </table>
 }
-
-<a asp-action="Index" class="btn btn-secondary">Back to Surveys</a>
-

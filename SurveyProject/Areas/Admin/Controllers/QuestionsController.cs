@@ -55,8 +55,19 @@ namespace SurveyProject.Areas.Admin.Controllers
 
         public IActionResult AddOption(int questionId)
         {
-            ViewBag.QuestionId = questionId; // Pass QuestionId to the view
-            return View(new OptionDto());
+            var question = _context.Questions
+                .Include(q => q.Survey)
+                .FirstOrDefault(q => q.Id == questionId);
+
+            if (question == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.QuestionId = questionId;
+            ViewBag.SurveyId = question.SurveyId;
+
+            return View();
         }
 
         [HttpPost]
@@ -64,6 +75,13 @@ namespace SurveyProject.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Retrieve the survey ID associated with the question
+                var question = _context.Questions.FirstOrDefault(q => q.Id == questionId);
+                if (question == null)
+                {
+                    return NotFound();
+                }
+
                 var option = new OptionModel
                 {
                     QuestionId = questionId,
@@ -73,7 +91,8 @@ namespace SurveyProject.Areas.Admin.Controllers
                 _context.Options.Add(option);
                 _context.SaveChanges();
 
-                return RedirectToAction("Details", new { id = questionId });
+                // Redirect to the survey details page
+                return RedirectToAction("Details", "Survey", new { id = question.SurveyId });
             }
 
             return View(optionDto);
@@ -184,7 +203,11 @@ namespace SurveyProject.Areas.Admin.Controllers
 
         public IActionResult EditOption(int id)
         {
-            var option = _context.Options.FirstOrDefault(o => o.Id == id);
+            var option = _context.Options
+                .Include(o => o.Question)
+                .ThenInclude(q => q.Survey)
+                .FirstOrDefault(o => o.Id == id);
+
             if (option == null)
             {
                 return NotFound();
@@ -197,24 +220,31 @@ namespace SurveyProject.Areas.Admin.Controllers
                 QuestionId = option.QuestionId
             };
 
+            ViewBag.SurveyId = option.Question.SurveyId;
+
             return View(optionDto);
         }
+
 
         [HttpPost]
         public IActionResult EditOption(OptionDto optionDto)
         {
             if (ModelState.IsValid)
             {
-                var option = _context.Options.Find(optionDto.Id);
+                var option = _context.Options
+                    .Include(o => o.Question)
+                    .FirstOrDefault(o => o.Id == optionDto.Id);
+
                 if (option == null)
                 {
                     return NotFound();
                 }
 
                 option.OptionText = optionDto.OptionText;
-
                 _context.SaveChanges();
-                return RedirectToAction("Details", "Questions", new { id = optionDto.QuestionId });
+
+                // Redirect to the survey details page
+                return RedirectToAction("Details", "Survey", new { id = option.Question.SurveyId });
             }
 
             return View(optionDto);
@@ -222,17 +252,22 @@ namespace SurveyProject.Areas.Admin.Controllers
 
         public IActionResult DeleteOption(int id)
         {
-            var option = _context.Options.Find(id);
+            var option = _context.Options
+                .Include(o => o.Question)
+                .FirstOrDefault(o => o.Id == id);
+
             if (option == null)
             {
                 return NotFound();
             }
 
-            var questionId = option.QuestionId;
+            var surveyId = option.Question.SurveyId;
+
             _context.Options.Remove(option);
             _context.SaveChanges();
 
-            return RedirectToAction("Details", "Questions", new { id = questionId });
+            // Redirect to the survey details page
+            return RedirectToAction("Details", "Survey", new { id = surveyId });
         }
 
     }

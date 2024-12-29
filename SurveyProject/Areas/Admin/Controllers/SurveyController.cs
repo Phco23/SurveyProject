@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SurveyProject.MappingProfiles;
 using SurveyProject.Models;
 using SurveyProject.Models.ViewModels;
 using SurveyProject.Repository;
@@ -34,14 +35,141 @@ namespace SurveyProject.Areas.Admin.Controllers
             if (id == null) return NotFound();
 
             var survey = await _dataContext.Surveys
-                .Include(s => s.Questions) 
-                .ThenInclude(q => q.QuestionType) 
+                .Include(s => s.Questions)
+                    .ThenInclude(q => q.Options) // Include options for each question
+                .Include(s => s.Questions)
+                    .ThenInclude(q => q.QuestionType) // Include the question type
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (survey == null) return NotFound();
 
-            return View(survey);
+            // Map the survey entity to the view model
+            var viewModel = new SurveyDetailsViewModel
+            {
+                Id = survey.Id,
+                Title = survey.Title,
+                Description = survey.Description,
+                Questions = survey.Questions.Select(q => new QuestionWithOptionsDto
+                {
+                    Id = q.Id,
+                    QuestionText = q.QuestionText,
+                    QuestionTypeId = q.QuestionType.Id,
+                    QuestionTypeName = q.QuestionType.Name,
+                    Options = q.Options.Select(o => new OptionDto
+                    {
+                        Id = o.Id,
+                        OptionText = o.OptionText
+                    }).ToList()
+                }).ToList()
+            };
+
+            return View(viewModel);
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> ViewUsersForOption(int optionId)
+        {
+            // Get option details, including the question and survey it belongs to
+            var optionDetails = await _dataContext.Options
+                .Include(o => o.Question)
+                .ThenInclude(q => q.Survey)
+                .Where(o => o.Id == optionId)
+                .Select(o => new
+                {
+                    OptionName = o.OptionText,
+                    QuestionName = o.Question.QuestionText,
+                    SurveyName = o.Question.Survey.Title,
+                    SurveyId = o.Question.Survey.Id // Include the SurveyId
+                })
+                .FirstOrDefaultAsync();
+
+            if (optionDetails == null)
+            {
+                ViewBag.Message = "Invalid option selected.";
+                return View(new CompositeViewModel());
+            }
+
+            // Get user responses for the option
+            var users = await _dataContext.ResponseDetails
+                .Include(rd => rd.Response)
+                .ThenInclude(r => r.User)
+                .Where(rd => rd.OptionId == optionId)
+                .Select(rd => new
+                {
+                    UserName = rd.Response.User != null ? rd.Response.User.UserName : "Unknown",
+                    SubmittedDate = rd.Response.SubmittedDate
+                })
+                .ToListAsync();
+
+            // If no users, return with a message
+            if (!users.Any())
+            {
+                ViewBag.Message = "No users have selected this option.";
+                return View(new CompositeViewModel
+                {
+                    SurveyName = optionDetails.SurveyName,
+                    SurveyId = optionDetails.SurveyId, // Pass SurveyId to the view
+                    QuestionName = optionDetails.QuestionName,
+                    OptionName = optionDetails.OptionName,
+                    UserResponses = new List<UserResponseViewModel>()
+                });
+            }
+
+            // Map users to UserResponseViewModel
+            var userResponses = users.Select(u => new UserResponseViewModel
+            {
+                UserName = u.UserName,
+                SubmittedDate = u.SubmittedDate
+            }).ToList();
+
+            // Create CompositeViewModel
+            var model = new CompositeViewModel
+            {
+                SurveyName = optionDetails.SurveyName,
+                SurveyId = optionDetails.SurveyId, // Include SurveyId in the model
+                QuestionName = optionDetails.QuestionName,
+                OptionName = optionDetails.OptionName,
+                UserResponses = userResponses
+            };
+
+            return View(model);
+        }
+
+        [HttpGet("Admin/Survey/ViewTextResponses/{questionId}")]
+        public async Task<IActionResult> ViewTextResponses(int questionId)
+        {
+            var question = await _dataContext.Questions
+                .Include(q => q.Survey)
+                .FirstOrDefaultAsync(q => q.Id == questionId);
+
+            if (question == null)
+                return NotFound();
+
+            var textResponses = await _dataContext.ResponseDetails
+                .Include(rd => rd.Response)
+                .ThenInclude(r => r.User)
+                .Where(rd => rd.QuestionId == questionId && rd.AnswerText != null)
+                .Select(rd => new TextResponseViewModel
+                {
+                    UserName = rd.Response.User != null ? rd.Response.User.UserName : "Anonymous",
+                    TextAnswer = rd.AnswerText,
+                    SubmittedDate = rd.Response.SubmittedDate
+                }).ToListAsync();
+
+            var viewModel = new TextResponsePageViewModel
+            {
+                SurveyId = question.SurveyId, // Include the survey ID
+                SurveyTitle = question.Survey.Title,
+                QuestionText = question.QuestionText,
+                TextResponses = textResponses
+            };
+
+            return View(viewModel);
+        }
+
+
+
 
         [HttpGet("Admin/Survey/SurveyResponses/{surveyId}")]
         public async Task<IActionResult> SurveyResponses(int surveyId)
@@ -50,10 +178,11 @@ namespace SurveyProject.Areas.Admin.Controllers
                 .Include(s => s.Questions)
                     .ThenInclude(q => q.Options)
                 .Include(s => s.Questions)
-                    .ThenInclude(q => q.QuestionType) // Include QuestionType
+                    .ThenInclude(q => q.QuestionType)
                 .FirstOrDefaultAsync(s => s.Id == surveyId);
 
-            if (survey == null) return NotFound();
+            if (survey == null)
+                return NotFound();
 
             var responses = await _dataContext.ResponseDetails
                 .Include(rd => rd.Response)
@@ -61,31 +190,35 @@ namespace SurveyProject.Areas.Admin.Controllers
                 .Where(rd => rd.Question.SurveyId == surveyId)
                 .ToListAsync();
 
-            var responseSummary = survey.Questions.Select(question => new   
+            var responseSummary = survey.Questions.Select(question => new QuestionResponseSummaryViewModel
             {
+                QuestionId = question.Id,
                 QuestionText = question.QuestionText,
-                QuestionTypeId = question.QuestionTypeId,
-                QuestionTypeName = question.QuestionType.Name, // Include type name
-                Options = question.Options.Select(option => new
+                QuestionTypeName = question.QuestionType.Name,
+                Options = question.Options.Select(option => new OptionResponseViewModel
                 {
+                    Id = option.Id,
                     OptionText = option.OptionText,
                     Count = responses.Count(r => r.OptionId == option.Id),
-                    Percentage = responses.Count(r => r.OptionId == option.Id) * 100.0 / responses.Count(r => r.QuestionId == question.Id)
-                }).ToList(),
-                UserResponses = responses
-                    .Where(r => r.QuestionId == question.Id)
-                    .Select(r => new
-                    {
-                        UserName = r.Response.User.UserName,
-                        SelectedOption = r.Option?.OptionText ?? r.AnswerText
-                    }).ToList()
+                    Percentage = responses.Count(r => r.QuestionId == question.Id) == 0
+                        ? 0
+                        : responses.Count(r => r.OptionId == option.Id) * 100.0 / responses.Count(r => r.QuestionId == question.Id)
+                }).ToList()
             }).ToList();
 
-            ViewBag.SurveyTitle = survey.Title;
-            ViewBag.ResponseSummary = responseSummary;
+            var viewModel = new SurveyResponseViewModel
+            {
+                SurveyId = survey.Id, // Pass the SurveyId
+                SurveyTitle = survey.Title,
+                ResponseSummary = responseSummary
+            };
 
-            return View();
+            return View(viewModel);
         }
+
+
+
+
 
 
 

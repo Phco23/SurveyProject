@@ -10,10 +10,10 @@
         <label asp-for="OptionText" class="control-label">Option Text</label>
         <input asp-for="OptionText" class="form-control" />
         <span asp-validation-for="OptionText" class="text-danger"></span>
-    </div>`
+    </div>
 
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Add Option</button>
-        <a asp-action="Details" asp-route-id="@ViewBag.QuestionId" class="btn btn-secondary">Cancel</a>
+        <a asp-action="Details" asp-controller="Survey" asp-route-id="@ViewBag.SurveyId" class="btn btn-secondary">Cancel</a>
     </div>
 </form>
