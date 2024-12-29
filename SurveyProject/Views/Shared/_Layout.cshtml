@@ -63,7 +63,7 @@
                 <a asp-controller="Home" asp-action="EditProfiles" asp-route-userId="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" class="nav-item nav-link">
                     Edit Profiles
                 </a>
-                <a asp-controller="FAQ" asp-action="FAQ" class="nav-item nav-link">FAQ</a>
+                <a asp-controller="FAQ" asp-action="Index" class="nav-item nav-link">FAQ</a>
             </div>
 
             @if (User.Identity?.IsAuthenticated ?? false)
@@ -91,7 +91,7 @@
                     <h5 class="text-white mb-4">Quick Links</h5>
                     <ul class="list-unstyled d-flex flex-wrap">
                         <li class="me-3"><a asp-controller="Home" asp-action="Index" class="text-light text-decoration-none">Home</a></li>
-                        <li class="me-3"><a asp-controller="#" asp-action="#" class="text-light text-decoration-none">Surveys</a></li>
+                        <li class="me-3"><a asp-controller="Survey" asp-action="ListSurvey" class="text-light text-decoration-none">Surveys</a></li>
                         <li class="me-3"><a asp-controller="#" asp-action="#" class="text-light text-decoration-none">Edit Profile</a></li>
                         <li class="me-3"><a asp-controller="FAQ" asp-action="Index" class="text-light text-decoration-none">FAQ</a></li>
                         <li class="me-3"><a asp-controller="Account" asp-action="Login" class="text-light text-decoration-none">Login</a></li>

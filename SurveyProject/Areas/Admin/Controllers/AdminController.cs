@@ -118,10 +118,43 @@ namespace SurveyProject.Areas.Admin.Controllers
             return View(users); 
         }
 
-		
+        [HttpGet]
+        public async Task<IActionResult> Edit(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+                return NotFound();
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+                return NotFound();
+
+            return View(user);  
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+                return NotFound();
+
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+                return NotFound();
+
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                TempData["SuccessMessage"] = "User deleted successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to delete user.";
+            }
+
+            return RedirectToAction("ManageUsers");
+        }
 
 
-
-	}
+    }
 
 }
