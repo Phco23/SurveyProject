@@ -7,7 +7,7 @@
     }
     else
     {
-        <!-- Active Surveys -->
+        <!-- Active Surveys --> 
         <div class="container-xxl py-5">
             <div class="container">
                 <div class="text-center mb-5">
@@ -18,7 +18,7 @@
                     {
                         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="card border-0 shadow-sm">
-                                <img class="img-fluid" src="/img/E_1.jpg" alt="image_Survey" loading="lazy" style="margin: 10px 10px 10px 10px;">
+                                <img class="img-fluid" src="/img/E_3.jpg" alt="image_Survey" loading="lazy" style="margin: 10px 10px 10px 10px;">
                                 <div class="card-body" style="background-color: #F9F9F9; margin: 10px 10px 10px 10px;">
                                     <h5 class="card-title">@survey.Title</h5>
                                     <div class="d-flex justify-content-between px-4">
@@ -53,7 +53,7 @@
                     {
                         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="card border-0 shadow-sm">
-                                <img class="img-fluid" src="/img/E_1.jpg" alt="image_Survey" loading="lazy" style="margin: 10px 10px 10px 10px;">
+                                <img class="img-fluid" src="/img/E_4.jpg" alt="image_Survey" loading="lazy" style="margin: 10px 10px 10px 10px;">
                                 <div class="card-body" style="background-color: #F9F9F9; margin: 10px 10px 10px 10px;">
                                     <h5 class="card-title">@survey.Title</h5>
                                     <div class="d-flex justify-content-between px-4">
@@ -68,7 +68,7 @@
                                             <p class="mb-2" style="color: #ff0000;">Expired</p>
                                         </div>
                                     </div>
-                                    <a href="#" class="btn btn-secondary disabled" style="width: 100%; border-radius: 10px;">Winner</a>
+                                    <a href="#" class="btn btn-primary" style="width: 100%; border-radius: 10px;">Winner</a>
                                 </div>
                             </div>
                         </div>
@@ -78,3 +78,36 @@
         </div>
     }
 </div>
+<!-- Feedback Start -->
+<div class="container-xxl py-5 category">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h1 class="section-title bg-white text-center text-primary px-3">Submit Your Feedback</h1>
+        </div>
+        <section class="mt-5">
+            <form>
+                <div class="mb-3">
+                    <label for="survey" class="form-label">Select Survey:</label>
+                    <select id="survey" name="survey" class="form-select">
+                        <option value="customer_satisfaction">Customer Satisfaction Survey</option>
+                        <option value="reading_habits">Reading Habits Survey</option>
+                        <option value="technology_trends">Technology Trends Survey</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="feedback" class="form-label">Feedback:</label>
+                    <textarea 
+                        id="feedback" 
+                        name="feedback" 
+                        class="form-control" 
+                        rows="5" 
+                        placeholder="Enter your feedback">
+                    </textarea>
+                </div>
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+            </form>
+        </section>
+    </div>
+</div>
+<!-- Feedback End -->

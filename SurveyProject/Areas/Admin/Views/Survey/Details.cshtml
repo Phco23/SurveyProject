@@ -5,8 +5,8 @@
     <div class="row mb-4">
         <div class="col-md-8 offset-md-2">
             <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Survey Information</h5>
+                <div class="card-header  text-white" style="background-color: #06BBCC;">
+                    <h5 class="mb-0" style="color: white; ">Survey Information</h5>
                 </div>
                 <div class="card-body">
                     <p><strong>Title:</strong> @Model.Title</p>
@@ -18,10 +18,12 @@
 
     <div class="row">
         <div class="col text-center">
-            <h3 class="fw-bold">Questions & Options</h3>
-            <a asp-controller="Questions" asp-action="Create" asp-route-surveyId="@Model.Id" class="btn btn-success px-4">Add Question</a>
+            <a asp-controller="Questions" asp-action="Create" asp-route-surveyId="@Model.Id" class="btn btn-primary px-4" 
+                style="border-radius: 10px; color: white;">Add Question</a>
         </div>
     </div>
+    
+    <br>
 
     @if (Model.Questions.Any())
     {
@@ -35,8 +37,10 @@
                                 <strong>@question.QuestionText - @question.QuestionTypeName</strong>
                             </div>
                             <div>
-                                <a asp-controller="Questions" asp-action="Edit" asp-route-id="@question.Id" class="btn btn-sm btn-warning">Edit</a>
-                                <a asp-controller="Questions" asp-action="Delete" asp-route-id="@question.Id" class="btn btn-sm btn-danger">Delete</a>
+                                <a asp-controller="Questions" asp-action="Edit" asp-route-id="@question.Id" class="btn btn-sm btn-warning"
+                                    style="border-radius: 10px; color: white;">Edit</a>
+                                <a asp-controller="Questions" asp-action="Delete" asp-route-id="@question.Id" class="btn btn-sm btn-danger"
+                                    style="border-radius: 10px; color: white;">Delete</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -55,16 +59,18 @@
                                             <tr>
                                                 <td>@option.OptionText</td>
                                                 <td>
-                                                    <a asp-controller="Questions" asp-action="EditOption" asp-route-id="@option.Id" class="btn btn-sm btn-warning">Edit</a>
+                                                    <a asp-controller="Questions" asp-action="EditOption" asp-route-id="@option.Id" class="btn btn-sm btn-warning"
+                                                        style="border-radius: 10px; color: white;" >Edit</a>
                                                     <form asp-controller="Questions" asp-action="DeleteOption" asp-route-id="@option.Id" method="post" style="display:inline;">
-                                                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                        <button type="submit" class="btn btn-sm btn-danger" style="border-radius: 10px; color: white;">Delete</button>
                                                     </form>
                                                 </td>
                                             </tr>
                                         }
                                     </tbody>
                                 </table>
-                                <a asp-controller="Questions" asp-action="AddOption" asp-route-questionId="@question.Id" class="btn btn-sm btn-primary mt-2">Add Option</a>
+                                <a asp-controller="Questions" asp-action="AddOption" asp-route-questionId="@question.Id" class="btn btn-sm btn-primary mt-2" 
+                                    style="border-radius: 10px; color: white;">Add Option</a>
                             }
                             else
                             {

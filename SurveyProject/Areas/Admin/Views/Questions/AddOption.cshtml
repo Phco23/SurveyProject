@@ -12,8 +12,10 @@
         <span asp-validation-for="OptionText" class="text-danger"></span>
     </div>
 
+    <br>
+
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Add Option</button>
-        <a asp-action="Details" asp-controller="Survey" asp-route-id="@ViewBag.SurveyId" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary" style="border-radius: 10px; color: white;">Add Option</button>
+        <a href="javascript:history.back()" class="btn btn-secondary" style="border-radius: 10px; color: white;">Cancel</a>
     </div>
 </form>
