@@ -1,21 +1,21 @@
 ﻿@model SurveyModel
 
 <div class="container mt-5">
-    <h4 class="text-center mb-4 " style="color: #06BBCC;">Edit Product</h4>
+    <h4 class="mb-4 text-center">Edit Survey</h4>
     <div class="row justify-content-center">
         <div class="col-md-8">
             <form asp-action="Edit" enctype="multipart/form-data" class="shadow p-4 rounded bg-light">
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                 <div class="form-group mb-3">
                     <label class="form-label">Title</label>
-                    <input asp-for="Title" class="form-control" placeholder="Enter product title" />
+                    <input asp-for="Title" class="form-control" placeholder="Enter the title" />
                     <span asp-validation-for="Title" class="text-danger" />
                 </div>
 
                 <div class="form-group mb-3">
                     <label class="form-label">Description</label>
-                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter product description"></textarea>
+                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter a description"></textarea>
                     <span asp-validation-for="Description" class="text-danger" />
                 </div>
 
@@ -26,24 +26,35 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label">Role ID</label>
-                    <input asp-for="RoleId" class="form-control" placeholder="Enter role ID" />
+                    <label for="RoleId" class="form-label">Assign Role</label>
+                    <select id="RoleId" asp-for="RoleId" class="form-control" asp-items="ViewBag.Roles">
+                        <option value="">-- Select a Role --</option>
+                    </select>
                     <span asp-validation-for="RoleId" class="text-danger" />
                 </div>
 
-                <div class="form-group">
-                    <label asp-for="IsActive">Status</label>
-                    <select asp-for="IsActive" class="form-control" asp-items="ViewBag.IsActive"></select>
-                    <span asp-validation-for="IsActive" class="text-danger"></span>
+                <div class="form-group mb-3">
+                    <label class="form-label">Status</label>
+                    <select asp-for="IsActive" class="form-control" asp-items="ViewBag.IsActive">
+                        <option value="">-- Select Status --</option>
+                    </select>
+                    <span asp-validation-for="IsActive" class="text-danger" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="sendEmailToRoleUsers" name="sendEmailToRoleUsers" value="true" />
+                        <label class="form-check-label" for="sendEmailToRoleUsers">Send email to all users with this role</label>
+                    </div>
                 </div>
 
                 <div class="form-group text-center mt-4">
-                    <button type="submit" class="btn btn-primary px-5" style="border-radius: 10px; color: white;">Save Changes</button>
+                    <button type="submit" class="btn btn-primary px-5">Save Changes</button>
                 </div>
             </form>
             <div class="text-center mt-3">
-                <a asp-action="Index" class="btn btn-link">Back to Product List</a>
+                <a asp-action="Index" class="btn btn-link">Back to List Survey</a>
             </div>
         </div>
     </div>
-</div> 
+</div>

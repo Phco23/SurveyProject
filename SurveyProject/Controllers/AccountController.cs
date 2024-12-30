@@ -98,8 +98,11 @@ namespace SurveyProject.Controllers
                         await _userManager.AddToRoleAsync(newUser, "Student");
                     }
 
-                    return Redirect("/account/login");
+                    TempData["SuccessMessage"] = "Account pending for register success! We will soon send the result to your email.";
+
+                    return View();
                 }
+
                 foreach (IdentityError error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
@@ -107,6 +110,7 @@ namespace SurveyProject.Controllers
             }
             return View(user);
         }
+
         public async Task<IActionResult> Logout(string returnUrl = "/")
         {
             await _signInManager.SignOutAsync();

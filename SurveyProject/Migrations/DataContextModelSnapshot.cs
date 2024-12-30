@@ -389,7 +389,7 @@ namespace SurveyProject.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -398,6 +398,8 @@ namespace SurveyProject.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("Surveys");
                 });
@@ -524,6 +526,16 @@ namespace SurveyProject.Migrations
                     b.Navigation("Survey");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SurveyProject.Models.SurveyModel", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("SurveyProject.Models.QuestionModel", b =>

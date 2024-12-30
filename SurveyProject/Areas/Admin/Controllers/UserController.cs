@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SurveyProject.Models;
 using SurveyProject.Repository;
+using System.Security.Claims;
 
 namespace SurveyProject.Areas.Admin.Controllers
 {
@@ -13,12 +14,14 @@ namespace SurveyProject.Areas.Admin.Controllers
         private readonly UserManager<IdentityUserModel> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly DataContext _dataContext;
+        private SignInManager<IdentityUserModel> _signInManager;
 
-        public UserController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUserModel> userManager, DataContext dataContext)
+        public UserController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUserModel> userManager, DataContext dataContext, SignInManager<IdentityUserModel> signInManager)
         {
             _roleManager = roleManager;
             _userManager = userManager;
             _dataContext = dataContext;
+            _signInManager = signInManager;
         }
 
         public async Task<IActionResult> Index()
@@ -29,7 +32,7 @@ namespace SurveyProject.Areas.Admin.Controllers
                                         select new { User = u, RoleName = r.Name })
                                 .AsNoTracking()
                                 .ToListAsync();
-            return View(usersWithRoles);
+            return View(usersWithRoles); 
         }
 
         [HttpGet]
@@ -60,27 +63,40 @@ namespace SurveyProject.Areas.Admin.Controllers
                 return NotFound();
             }
 
+            var currentRoles = await _userManager.GetRolesAsync(existingUser);
+            Console.WriteLine("Current Roles: " + string.Join(", ", currentRoles));
+
             if (ModelState.IsValid)
             {
                 existingUser.UserName = user.UserName;
                 existingUser.Email = user.Email;
 
+                // Remove old roles
                 var oldRoles = await _userManager.GetRolesAsync(existingUser);
-
                 foreach (var role in oldRoles)
                 {
                     await _userManager.RemoveFromRoleAsync(existingUser, role);
                 }
 
+                // Add the new role
                 var newRole = await _roleManager.FindByIdAsync(user.RoleId);
                 if (newRole != null)
                 {
                     await _userManager.AddToRoleAsync(existingUser, newRole.Name);
+
+                    // Update the RoleId in AspNetUsers (if applicable)
+                    existingUser.RoleId = user.RoleId; // Assuming RoleId is a custom property in your IdentityUser
                 }
 
+                // Check roles after modification
+                var updatedRoles = await _userManager.GetRolesAsync(existingUser);
+                Console.WriteLine("Updated Roles: " + string.Join(", ", updatedRoles));
+
+                // Save changes
                 var updateUserResult = await _userManager.UpdateAsync(existingUser);
                 if (updateUserResult.Succeeded)
                 {
+                    await _signInManager.RefreshSignInAsync(existingUser);
                     return RedirectToAction("Index", "User");
                 }
                 else
@@ -96,6 +112,9 @@ namespace SurveyProject.Areas.Admin.Controllers
             ViewBag.Roles = new SelectList(roles, "Id", "Name");
             return View(existingUser);
         }
+
+
+
 
 
         [HttpGet]

@@ -26,9 +26,9 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="form-label">Assign Role</label>
-                    <select id="AssignedRole" name="assignedRole" class="form-control">
-                        @foreach (var role in ViewBag.Roles)
+                    <label for="RoleId"  class="form-label">Assign Role</label>
+                    <select id="AssignedRole" name="selectedRoleId" class="form-control" required>
+                        @foreach (var role in ViewBag.Roles as SelectList)
                         {
                             <option value="@role.Value">@role.Text</option>
                         }

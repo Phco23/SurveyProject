@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using eLearning.Repository;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -17,18 +18,39 @@ namespace SurveyProject.Areas.Admin.Controllers
         private readonly UserManager<IdentityUserModel> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly DataContext _dataContext;
+        private readonly EmailService _emailService;
 
-        public SurveyController(UserManager<IdentityUserModel> userManager, RoleManager<IdentityRole> roleManager, DataContext dataContext)
+        public SurveyController(UserManager<IdentityUserModel> userManager, RoleManager<IdentityRole> roleManager, DataContext dataContext, EmailService emailService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _dataContext = dataContext;
+            _emailService = emailService;
         }
         // GET: Surveys
         public async Task<IActionResult> Index()
         {
-            return View(await _dataContext.Surveys.ToListAsync());
+            var surveysWithRoles = await (from survey in _dataContext.Surveys
+                                          join role in _dataContext.Roles
+                                          on survey.RoleId equals role.Id into roleGroup
+                                          from role in roleGroup.DefaultIfEmpty()
+                                          select new SurveyWithRoleViewModel
+                                          {
+                                              Id = survey.Id,
+                                              Title = survey.Title,
+                                              Description = survey.Description,
+                                              CreatedDate = survey.CreatedDate,
+                                              ExpiredDate = survey.ExpiredDate,
+                                              RoleName = role != null ? role.Name : "No Role Assigned",
+                                              IsActive = survey.IsActive
+                                          })
+                                      .AsNoTracking()
+                                      .ToListAsync();
+
+            return View(surveysWithRoles);
         }
+
+
         // GET: Surveys/Details/{id}
         public async Task<IActionResult> Details(int? id)
         {
@@ -226,8 +248,9 @@ namespace SurveyProject.Areas.Admin.Controllers
         // GET: Surveys/Create
         public async Task<IActionResult> Create()
         {
+            // Fetch roles for the dropdown
             var roles = await _roleManager.Roles.ToListAsync();
-            ViewBag.Roles = new SelectList(roles, "Name", "Name");
+            ViewBag.Roles = new SelectList(roles, "Id", "Name"); // Use "Id" for RoleId and "Name" for display
 
             return View();
         }
@@ -235,30 +258,34 @@ namespace SurveyProject.Areas.Admin.Controllers
         // POST: Surveys/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(SurveyModel survey, string assignedRole)
+        public async Task<IActionResult> Create(SurveyModel survey, string selectedRoleId)
         {
             if (ModelState.IsValid)
             {
+                survey.RoleId = selectedRoleId; // Assign the selected RoleId
                 survey.CreatedDate = DateTime.Now;
-                survey.IsActive = false;
+                survey.IsActive = false; // Or set based on your logic
                 survey.TotalResponses = 0;
-                survey.RoleId = assignedRole; // Assign the selected role
 
                 _dataContext.Add(survey);
                 await _dataContext.SaveChangesAsync();
-                return Redirect("/admin");
+                return RedirectToAction("Index"); // Redirect to the list of surveys or admin page
             }
 
             // Repopulate roles in case of validation error
             var roles = await _roleManager.Roles.ToListAsync();
-            ViewBag.Roles = new SelectList(roles, "Name", "Name", assignedRole);
+            ViewBag.Roles = new SelectList(roles, "Id", "Name", selectedRoleId);
 
             return View(survey);
         }
 
+
+
+
         // GET: Surveys/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
             if (id == null) return NotFound();
 
             var survey = await _dataContext.Surveys.FindAsync(id);
@@ -271,29 +298,58 @@ namespace SurveyProject.Areas.Admin.Controllers
             };
             ViewBag.IsActive = new SelectList(isActiveOptions, "Value", "Text", survey.IsActive.ToString().ToLower());
 
+            // Fetch roles for the dropdown
+            var roles = await _roleManager.Roles.ToListAsync();
+            ViewBag.Roles = new SelectList(roles, "Id", "Name", survey.RoleId); // Preselect the current RoleId
+
             return View(survey);
         }
 
         // POST: Surveys/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, SurveyModel survey)
+        public async Task<IActionResult> Edit(int id, SurveyModel survey, bool sendEmailToRoleUsers = false)
         {
-            var isActiveOptions = new List<SelectListItem>
-            {
-                new SelectListItem { Text = "Active", Value = "true" },
-                new SelectListItem { Text = "Inactive", Value = "false" }
-            };
-            ViewBag.IsActive = new SelectList(isActiveOptions, "Value", "Text", survey.IsActive.ToString().ToLower());
-
             if (id != survey.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _dataContext.Update(survey);
+                    var existingSurvey = await _dataContext.Surveys.FindAsync(id);
+                    if (existingSurvey == null) return NotFound();
+
+                    // Update survey properties
+                    existingSurvey.Title = survey.Title;
+                    existingSurvey.Description = survey.Description;
+                    existingSurvey.ExpiredDate = survey.ExpiredDate;
+                    existingSurvey.RoleId = survey.RoleId;
+                    existingSurvey.IsActive = survey.IsActive;
+
+                    _dataContext.Update(existingSurvey);
                     await _dataContext.SaveChangesAsync();
+
+                    // Send email if the option is enabled
+                    if (sendEmailToRoleUsers)
+                    {
+                        var roleUsers = await (from user in _dataContext.Users
+                                               join userRole in _dataContext.UserRoles on user.Id equals userRole.UserId
+                                               where userRole.RoleId == survey.RoleId
+                                               select user).ToListAsync();
+
+                        foreach (var user in roleUsers)
+                        {
+                            var subject = "Survey Updated";
+                            var body = $@"
+                        Dear {user.UserName},<br><br>
+                        The survey titled <strong>{survey.Title}</strong> has been updated. Please review it using the link below:<br><br>
+                        <a href='https://localhost:7072/SurveyDetails/{survey.Id}'>View Survey</a><br><br>
+                        Best regards,<br>Your Team
+                            ";
+
+                            await _emailService.SendEmailAsync(user.Email, subject, body);
+                        }
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -305,6 +361,10 @@ namespace SurveyProject.Areas.Admin.Controllers
             }
             return View(survey);
         }
+
+
+
+
 
         public async Task<IActionResult> Delete(int Id)
         {

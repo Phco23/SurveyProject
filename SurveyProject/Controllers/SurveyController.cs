@@ -135,10 +135,15 @@ namespace SurveyProject.Controllers
 
         public async Task<IActionResult> SurveyDetails(int id)
         {
+
             // Get the logged-in user's ID
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
                 return Redirect("/Account/Login"); // Ensure the user is authenticated
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+                return Unauthorized();
 
             // Check if the user has already submitted the survey
             var hasSubmitted = await _context.Responses
@@ -162,6 +167,10 @@ namespace SurveyProject.Controllers
 
             if (survey == null)
                 return NotFound();
+
+            if (survey == null || survey.RoleId != user.RoleId)
+                return Unauthorized();
+
 
             if (!survey.IsActive || survey.ExpiredDate < DateTime.UtcNow)
             {
@@ -196,9 +205,18 @@ namespace SurveyProject.Controllers
 
         public async Task<IActionResult> ListSurvey()
         {
-            var surveys = await _context.Surveys.ToListAsync();
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Redirect("/Account/Login");
 
-            // Convert SurveyModel to SurveyViewModel
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+                return Unauthorized();
+
+            var surveys = await _context.Surveys
+                .Where(s => s.RoleId == user.RoleId)
+                .ToListAsync();
+
             var surveyViewModels = surveys.Select(s => new SurveyViewModel
             {
                 SurveyId = s.Id,
@@ -210,6 +228,7 @@ namespace SurveyProject.Controllers
 
             return View(surveyViewModels);
         }
+
 
 
     }
