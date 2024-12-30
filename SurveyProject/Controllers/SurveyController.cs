@@ -231,9 +231,18 @@ namespace SurveyProject.Controllers
 
         public async Task<IActionResult> ExpiredSurvey()
         {
-            var surveys = await _context.Surveys.ToListAsync();
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Redirect("/Account/Login");
 
-            // Convert SurveyModel to SurveyViewModel
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+                return Unauthorized();
+
+            var surveys = await _context.Surveys
+                .Where(s => s.RoleId == user.RoleId)
+                .ToListAsync();
+
             var surveyViewModels = surveys.Select(s => new SurveyViewModel
             {
                 SurveyId = s.Id,
@@ -244,9 +253,9 @@ namespace SurveyProject.Controllers
             }).ToList();
 
             return View(surveyViewModels);
+
+
+
         }
-
-
-
     }
 }

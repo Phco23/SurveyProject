@@ -53,7 +53,24 @@ namespace SurveyProject.Areas.Admin.Controllers
         // GET: ExpiredSurvey
         public async Task<IActionResult> ExpiredSurvey()
         {
-            return View(await _dataContext.Surveys.ToListAsync());
+            var surveysWithRoles = await (from survey in _dataContext.Surveys
+                                          join role in _dataContext.Roles
+                                          on survey.RoleId equals role.Id into roleGroup
+                                          from role in roleGroup.DefaultIfEmpty()
+                                          select new SurveyWithRoleViewModel
+                                          {
+                                              Id = survey.Id,
+                                              Title = survey.Title,
+                                              Description = survey.Description,
+                                              CreatedDate = survey.CreatedDate,
+                                              ExpiredDate = survey.ExpiredDate,
+                                              RoleName = role != null ? role.Name : "No Role Assigned",
+                                              IsActive = survey.IsActive
+                                          })
+                                     .AsNoTracking()
+                                     .ToListAsync();
+
+            return View(surveysWithRoles);
         }
         // GET: Surveys/Details/{id}
         public async Task<IActionResult> Details(int? id)
