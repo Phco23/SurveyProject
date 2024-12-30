@@ -7,18 +7,46 @@
     }
     else
     {
+        <!-- Header -->
+        <app-quickpoll-header-nav-tabs class="container py-4">
+            <!-- Header Title -->
+            <div class="mb-4">
+                <h2 class="page-title text-primary fw-bold">Surveys</h2>
+                <p class="page-title-subtitle text-muted">
+                    Participate, leave a comment in Survey!
+                </p>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="events-nav">
+                <ul class="nav nav-tabs ">
+                    <li class="nav-item">
+                        <a asp-controller="Survey" asp-action="ListSurvey" class="nav-link active">
+                            <i class="bi bi-clipboard-check"></i> Active Surveys
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Survey" asp-action="ExpiredSurvey" class="nav-link">
+                            <i class="bi bi-clipboard-x"></i> Expired Surveys
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </app-quickpoll-header-nav-tabs>
+
+
         <!-- Active Surveys --> 
         <div class="container-xxl py-5">
             <div class="container">
-                <div class="text-center mb-5">
+                @* <div class="text-center mb-5">
                     <h2 class="section-title bg-white text-primary px-3">Active Surveys</h2>
-                </div>
+                </div> *@
                 <div class="row g-4">
                     @foreach (var survey in Model.Where(s => s.IsActive && s.ExpiredDate >= DateTime.UtcNow))
                     {
                         <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                             <div class="card border-0 shadow-sm">
-                                <img class="img-fluid" src="/img/E_3.jpg" alt="image_Survey" loading="lazy" style="margin: 10px 10px 10px 10px;">
+                                <img class="img-fluid" src="/img/E_0.webp" alt="image_Survey" loading="lazy" style="margin: 10px 10px 10px 10px;">
                                 <div class="card-body" style="background-color: #F9F9F9; margin: 10px 10px 10px 10px;">
                                     <h5 class="card-title">@survey.Title</h5>
                                     <div class="d-flex justify-content-between px-4">
@@ -41,41 +69,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Expired Surveys -->
-        <div class="container-xxl py-5">
-            <div class="container">
-                <div class="text-center mb-5">
-                    <h2 class="section-title bg-white text-primary px-3">Expired Surveys</h2>
-                </div>
-                <div class="row g-4">
-                    @foreach (var survey in Model.Where(s => !s.IsActive || s.ExpiredDate < DateTime.UtcNow))
-                    {
-                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                            <div class="card border-0 shadow-sm">
-                                <img class="img-fluid" src="/img/E_4.jpg" alt="image_Survey" loading="lazy" style="margin: 10px 10px 10px 10px;">
-                                <div class="card-body" style="background-color: #F9F9F9; margin: 10px 10px 10px 10px;">
-                                    <h5 class="card-title">@survey.Title</h5>
-                                    <div class="d-flex justify-content-between px-4">
-                                        <div class="left text-start">
-                                            <p class="mb-2">Questions</p>
-                                            <p class="mb-2">Time</p>
-                                            <p class="mb-2">Status</p>
-                                        </div>
-                                        <div class="right text-end">
-                                            <p class="mb-2">15</p>
-                                            <p class="mb-2">2 minutes</p>
-                                            <p class="mb-2" style="color: #ff0000;">Expired</p>
-                                        </div>
-                                    </div>
-                                    <a href="#" class="btn btn-primary" style="width: 100%; border-radius: 10px;">Winner</a>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-            </div>
-        </div>
+        <!-- Active Surveys End --> 
     }
 </div>
 <!-- Feedback Start -->
@@ -95,7 +89,7 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="feedback" class="form-label">Feedback:</label>
+                    <label for="feedback" class="form-label">Feedback:</label> 
                     <textarea 
                         id="feedback" 
                         name="feedback" 
