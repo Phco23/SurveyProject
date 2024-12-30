@@ -1,7 +1,12 @@
 @model SurveyProject.Models.FAQModel
 
+<div>
+    <a asp-action="Index" class="btn btn-link">
+        <i class="bi bi-arrow-left me-2"></i>Back 
+    </a>
+</div>
 <div class="container">
-    <h2>Create FAQ</h2>
+    <h2 class="page-title text-primary fw-bold">Create FAQ</h2>
     <form asp-action="Create">
         <div class="form-group">
             <label asp-for="Tittle"></label>
@@ -9,8 +14,11 @@
         </div>
         <div class="form-group">
             <label asp-for="Content"></label>
-            <textarea asp-for="Content" class="form-control"></textarea>
+            <textarea asp-for="Content" class="form-control" ></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-sm btn-primary mt-2" style="border-radius: 10px; color: white;background-color: #06BBCC;">
+            Submit
+        </button>
+        
     </form>
 </div>

@@ -211,6 +211,23 @@ namespace SurveyProject.Controllers
             return View(surveyViewModels);
         }
 
+        public async Task<IActionResult> ExpiredSurvey()
+        {
+            var surveys = await _context.Surveys.ToListAsync();
+
+            // Convert SurveyModel to SurveyViewModel
+            var surveyViewModels = surveys.Select(s => new SurveyViewModel
+            {
+                SurveyId = s.Id,
+                Title = s.Title,
+                Description = s.Description,
+                ExpiredDate = s.ExpiredDate,
+                IsActive = s.IsActive
+            }).ToList();
+
+            return View(surveyViewModels);
+        }
+
 
     }
 }

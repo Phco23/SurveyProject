@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SurveyModel>
+@model IEnumerable<SurveyModel>
 
 <div class="container mt-4">
         <!-- Header -->
@@ -15,12 +15,12 @@
             <div class="events-nav">
                 <ul class="nav nav-tabs ">
                     <li class="nav-item">
-                        <a asp-action="Index" class="nav-link active">
+                        <a asp-action="Index" class="nav-link ">
                             <i class="bi bi-clipboard-check"></i> Active Surveys
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a asp-action="ExpiredSurvey" class="nav-link">
+                        <a asp-action="ExpiredSurvey" class="nav-link active">
                             <i class="bi bi-clipboard-x"></i> Expired Surveys
                         </a>
                     </li>
@@ -36,9 +36,9 @@
     <hr>
     <!-- Active SURVEYS START-->
             <div class="container-xxl py-6">
-                <div class="container">
+                <div class="container"> 
                     <div class="row g-4">
-                        @foreach (var item in Model.Where(i => i.IsActive))
+                        @foreach (var item in Model.Where(i => !i.IsActive))
                         {
                             <!-- Survey Item 1 -->
                             <div class="col-lg-5 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -48,15 +48,17 @@
                                         <h5 class="card-title">@item.Title</h5>
                                         <!-- Survey Details -->
                                         <div class="d-flex justify-content-between px-4">
-                                            <div class="left text-start"> 
+                                            <div class="left text-start">
                                                 <p class="mb-2">No.</p>
-                                                <p class="mb-2">Created Date</p> 
+                                                <p class="mb-2">Description</p>
+                                                <p class="mb-2">Created Date</p>
                                                 <p class="mb-2">Expired Date</p>
                                                 <p class="mb-2">Survey Role</p>
                                                 <p class="mb-2">Status</p>
                                             </div>
                                             <div class="right text-end">
                                                 <p class="mb-2">@item.Id</p>
+                                                <p class="mb-2">@item.Description</p>
                                                 <p class="mb-2">@item.CreatedDate.ToString("MM/dd/yyyy")</p>
                                                 <p class="mb-2">@item.ExpiredDate.ToString("MM/dd/yyyy")</p>
                                                 <p class="mb-2">@item.RoleId</p>
