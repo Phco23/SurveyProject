@@ -50,7 +50,11 @@ namespace SurveyProject.Areas.Admin.Controllers
             return View(surveysWithRoles);
         }
 
-
+        // GET: ExpiredSurvey
+        public async Task<IActionResult> ExpiredSurvey()
+        {
+            return View(await _dataContext.Surveys.ToListAsync());
+        }
         // GET: Surveys/Details/{id}
         public async Task<IActionResult> Details(int? id)
         {

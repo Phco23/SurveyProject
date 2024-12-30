@@ -25,40 +25,48 @@
     
     <br>
 
+    
+
     @if (Model.Questions.Any())
     {
         <div class="row">
+            @{
+                int i = 1;
+            }
             @foreach (var question in Model.Questions)
             {
                 <div class="col-md-10 offset-md-1 mb-4">
                     <div class="card shadow-sm">
-                        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                        <div class="card-header bg-secondary text-white justify-content-between   ">
                             <div>
-                                <strong>@question.QuestionText - @question.QuestionTypeName</strong>
+                                <strong>@i. @question.QuestionText </strong>
                             </div>
-                            <div>
-                                <a asp-controller="Questions" asp-action="Edit" asp-route-id="@question.Id" class="btn btn-sm btn-warning"
-                                    style="border-radius: 10px; color: white;">Edit</a>
-                                <a asp-controller="Questions" asp-action="Delete" asp-route-id="@question.Id" class="btn btn-sm btn-danger"
-                                    style="border-radius: 10px; color: white;">Delete</a>
+                            <div class="d-flex justify-content-end">
+                                <a asp-controller="Questions" asp-action="Edit" asp-route-id="@question.Id" 
+                                class="btn btn-sm btn-warning ms-2"
+                                style="border-radius: 10px; color: white;">Edit</a>
+                                <a asp-controller="Questions" asp-action="Delete" asp-route-id="@question.Id" 
+                                class="btn btn-sm btn-danger ms-2"
+                                style="border-radius: 10px; color: white;">Delete</a>
                             </div>
+
                         </div>
                         <div class="card-body">
                             @if (question.QuestionTypeName != "Text")
                             {
-                                <table class="table table-bordered">
-                                    <thead class="table-light">
+                                <table class="table table-bordered ">
+                                    <thead class="table" style="background-color: #6C757D;">
                                         <tr>
-                                            <th>Option Text</th>
-                                            <th>Actions</th>
+                                            <th style="width: 650px; color: white;" >Option Text - @question.QuestionTypeName</th>
+                                            <th style="color: white;">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var option in question.Options)
                                         {
                                             <tr>
-                                                <td>@option.OptionText</td>
-                                                <td>
+                                                <td class="width: 650px; text-break">@option.OptionText</td>
+                                                <td >
                                                     <a asp-controller="Questions" asp-action="EditOption" asp-route-id="@option.Id" class="btn btn-sm btn-warning"
                                                         style="border-radius: 10px; color: white;" >Edit</a>
                                                     <form asp-controller="Questions" asp-action="DeleteOption" asp-route-id="@option.Id" method="post" style="display:inline;">
@@ -76,9 +84,11 @@
                             {
                                 <p class="text-muted">Options are not available for this question type.</p>
                             }
+                            
                         </div>
                     </div>
                 </div>
+                i++;
             }
         </div>
     }
@@ -90,4 +100,10 @@
             </div>
         </div>
     }
+</div>
+
+<div class="text-center mt-3">
+    <a asp-action="Index" class="btn btn-link">
+        <i class="bi bi-arrow-left me-2"></i>Back to Survey List
+    </a>
 </div>
