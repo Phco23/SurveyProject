@@ -50,23 +50,31 @@
                                         <div class="d-flex justify-content-between px-4">
                                             <div class="left text-start"> 
                                                 <p class="mb-2">No.</p>
-                                                <p class="mb-2">Created Date</p> 
-                                                <p class="mb-2">Expired Date</p>
                                                 <p class="mb-2">Survey Role</p>
                                                 <p class="mb-2">Status</p>
                                             </div>
+
                                             <div class="right text-end">
                                                 <p class="mb-2">@item.Id</p>
-                                                <p class="mb-2">@item.CreatedDate.ToString("MM/dd/yyyy")</p>
-                                                <p class="mb-2">@item.ExpiredDate.ToString("MM/dd/yyyy")</p>
                                                 <p class="mb-2">@item.RoleId</p>
                                                 @* <p class="mb-2 points " style="color: #28a745;">Active</p> *@
                                                 <p class="mb-2" style="color: @(item.IsActive ? "green" : "red")">
                                                     @(item.IsActive ? "Active" : "Inactive")
                                                 </p>
-
                                             </div>
+                                            
                                         </div>
+                                        
+                                        <div class="text-center">
+                                            <p class="mb-2">
+                                                    <i class="bi bi-calendar-event me-1 text-primary"></i> 
+                                                    @item.CreatedDate.ToString("MM/dd/yyyy")
+                                                    <span class="mx-2">--</span>
+                                                    <i class="bi bi-calendar-x me-1 text-danger"></i> 
+                                                    @item.ExpiredDate.ToString("MM/dd/yyyy")
+                                            </p>
+                                        </div>
+
                                         <div class="text-center">
                                             <a asp-action="Edit" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-warning me-1" style="border-radius: 10px; color: white;">Edit</a>
                                             <a asp-action="Details" asp-controller="Survey" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1" style="border-radius: 10px; color: white;">Details</a>
