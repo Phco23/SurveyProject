@@ -36,7 +36,7 @@
 
 			<li class="nav-item">
 				<a asp-area="Admin" asp-controller="Admin" asp-action="ManageUsers">
-					<i b-xymbtu3x3q="" class="bx bx-user"></i> 
+					<i b-xymbtu3x3q="" class="bx bx-user"></i>
 					<span class="text">Student Account</span>
 				</a>
 			</li>
@@ -47,16 +47,18 @@
 					<span class="text">Faculty Account</span>
 				</a>
 			</li>
+
 			<li>
 				<a href="#">
 					<i b-xymbtu3x3q="" class="bx bx-user"></i>
 					<span class="text">Student Account</span>
 				</a>
 			</li>
+
 			<li>
 				<a asp-action="PendingApprovals" asp-controller="Admin" asp-area="Admin">
 					<i b-xymbtu3x3q="" class="bx bxs-help-circle"></i>
-					<span class="text">PendingApprovals</span>
+					<span class="text">Pending Approvals</span>
 				</a>
 			</li>
 
@@ -66,15 +68,25 @@
 					<span class="text">Survey</span>
 				</a>
 			</li>
+
 			<li>
 				<a asp-action="Index" asp-controller="FAQ">
 					<i b-xymbtu3x3q="" class="bx bxs-help-circle"></i>
 					<span class="text">FAQ</span>
 				</a>
 			</li>
+
+			<li>
+				<a asp-area="Admin" asp-controller="Feedback" asp-action="ManageFeedback">
+					<i class="bx bxs-feedback"></i>
+					<span class="text">Manage Feedback</span>
+				</a>
+			</li>
+
+
 		</ul>
 		<ul class="side-menu">
-			@* <li>
+			@* <li>	
 				<a href="#">
 					<i class='bx bxs-cog'></i>
 					<span class="text">Settings</span>

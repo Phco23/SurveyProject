@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SurveyProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using SurveyProject.Repository;
 
 
 namespace SurveyProject.Areas.Admin.Controllers
@@ -13,10 +15,12 @@ namespace SurveyProject.Areas.Admin.Controllers
     public class AdminController : Controller
     {
         private readonly UserManager<IdentityUserModel> _userManager;
-
-        public AdminController(UserManager<IdentityUserModel> userManager)
+        private readonly DataContext _context;
+        public AdminController(UserManager<IdentityUserModel> userManager, DataContext context)
         {
             _userManager = userManager;
+            _context = context;
+            
         }
 
         public async Task<IActionResult> PendingApprovals()
@@ -146,6 +150,8 @@ namespace SurveyProject.Areas.Admin.Controllers
 
             return RedirectToAction("ManageUsers");
         }
+
+
 
 
     }
