@@ -26,7 +26,7 @@
                     </li>
                     <li class="nav-item">
                         <a asp-action="Create" asp-controller="Survey" class="nav-link">
-                            <i class="bi bi-plus-circle me-2"></i> Add Survey
+                            <i class="bi bi-plus-circle me-2"></i> Create Survey
                         </a>
                     </li>
                 </ul>
@@ -49,15 +49,12 @@
                                         <!-- Survey Details -->
                                         <div class="d-flex justify-content-between px-4">
                                             <div class="left text-start"> 
-                                                <p class="mb-2">No.</p>
                                                 <p class="mb-2">Survey Role</p>
                                                 <p class="mb-2">Status</p>
                                             </div>
 
                                             <div class="right text-end">
-                                                <p class="mb-2">@item.Id</p>
                                                 <p class="mb-2">@item.RoleId</p>
-                                                @* <p class="mb-2 points " style="color: #28a745;">Active</p> *@
                                                 <p class="mb-2" style="color: @(item.IsActive ? "green" : "red")">
                                                     @(item.IsActive ? "Active" : "Inactive")
                                                 </p>

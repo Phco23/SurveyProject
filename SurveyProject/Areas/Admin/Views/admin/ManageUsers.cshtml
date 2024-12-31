@@ -4,7 +4,7 @@
     ViewData["Title"] = "Manage Users";
 }
 
-<h2 class="text-center mb-4">@ViewData["Title"]</h2>
+<h2 class="page-title text-primary fw-bold text-center ">@ViewData["Title"]</h2>
 
 @if (TempData["SuccessMessage"] != null)
 {
@@ -31,7 +31,7 @@
                     <td>@user.Email</td>
                     <td><span class="text-success">Approved</span></td>
                     <td>
-                       
+                        <a asp-action="EditProfiles" asp-route-userId="@user.Id" class="btn btn-primary " style="border-radius: 10px; color: white;">Edit Profile</a>
                         <form asp-action="Delete" method="post" style="display:inline;">
                             <input type="hidden" name="userId" value="@user.Id" />
                             <button type="submit" class="btn btn-sm btn-danger">
