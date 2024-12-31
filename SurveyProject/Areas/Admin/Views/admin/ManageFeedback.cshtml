@@ -1,0 +1,30 @@
+﻿@model IEnumerable<FeedbackModel>
+
+<h1>Danh sách phản hồi</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nội dung phản hồi</th>
+            <th>Thời gian gửi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var feedback in Model)
+        {
+            <tr>
+                <td>@feedback.Id</td>
+                <td>@feedback.Content</td>
+                <td>@feedback.SubmittedAt.ToString("dd/MM/yyyy HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -32,9 +32,6 @@ namespace SurveyProject
                 options.Cookie.IsEssential = true;
             });
 
-
-
-
             builder.Services.AddIdentity<IdentityUserModel, IdentityRole>()
                .AddEntityFrameworkStores<DataContext>()
                .AddDefaultTokenProviders();
@@ -52,8 +49,6 @@ namespace SurveyProject
             });
 
             var app = builder.Build();
-
-
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SurveyProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using eLearning.Repository;
+using SurveyProject.Repository;
 
 
 namespace SurveyProject.Areas.Admin.Controllers
@@ -17,8 +18,12 @@ namespace SurveyProject.Areas.Admin.Controllers
         private readonly EmailService _emailService;
 
         public AdminController(UserManager<IdentityUserModel> userManager, EmailService emailService)
+        private readonly DataContext _context;
+        public AdminController(UserManager<IdentityUserModel> userManager, DataContext context)
         {
             _userManager = userManager;
+            _context = context;
+            
             _emailService = emailService;
         }
 
@@ -153,6 +158,8 @@ namespace SurveyProject.Areas.Admin.Controllers
 
             return RedirectToAction("ManageUsers");
         }
+
+
 
 
     }
