@@ -19,9 +19,6 @@
             <tr>
                 <th>#</th>
                 <th>UserName</th>
-             <th>Content</th>
-                <th>Gmail</th>
-
                 <th>Submitted At</th>
                 <th>User ID</th>
                 <th>Actions</th>
@@ -32,16 +29,13 @@
             {
                 <tr>
                     <td>@feedback.Id</td>
-                    <td>@feedback.UserName </td>
-                    <td>@feedback.Content</td>
+                    <td>@feedback.UserName</td>
                     <td>@feedback.SubmittedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                    <td>@feedback.UserId </td>
-
-                    <div>
-                        <p>@feedback.Content</p>
-                        <p>@feedback.SubmittedAt</p>
+                    <td>@feedback.UserId</td>
+                    <td>
+                        <a href="@Url.Action("Detail", "Feedback", new { id = feedback.Id })" class="btn btn-info">Detail</a>
                         <a href="@Url.Action("ConfirmDelete", "Feedback", new { id = feedback.Id })" class="btn btn-warning">Delete</a>
-                    </div>
+                    </td>
                 </tr>
             }
         </tbody>
