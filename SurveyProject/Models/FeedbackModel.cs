@@ -19,6 +19,7 @@ namespace SurveyProject.Models
 
         public string UserId { get; set; } 
 
-        public bool IsReviewed { get; set; } = false; 
+        public bool IsReviewed { get; set; } = false;
+        //public string Response { get; set; }
     }
 }

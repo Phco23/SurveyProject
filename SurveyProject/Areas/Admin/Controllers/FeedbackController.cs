@@ -8,14 +8,18 @@ using System.Net.Mail;
 using System.Net;
 using System.Security.Claims;
 
+
 namespace SurveyProject.Areas.Admin.Controllers
 {
 	[Area("Admin")]
     [Authorize]
     public class FeedbackController : Controller
 	{
-		private readonly DataContext _context;
-		public FeedbackController(	 DataContext context)
+        private readonly DataContext _context;
+        
+
+
+        public FeedbackController(DataContext context)
 		{
 			_context = context;
 
@@ -68,15 +72,7 @@ namespace SurveyProject.Areas.Admin.Controllers
                 _context.Feedbacks.Add(model);
                 await _context.SaveChangesAsync();
 
-                //var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
-                //if (!string.IsNullOrEmpty(userEmail))
-                //{
-                //    await SendFeedbackEmail(userEmail, model.Content);
-                //}
-                //if (string.IsNullOrEmpty(userEmail))
-                //{
-                //    TempData["ErrorMessage"] = "Unable to retrieve user email. Please check your account.";
-                //}
+               
 
                 TempData["SuccessMessage"] = "Feedback submitted successfully!";
                 return Redirect("/Home/ResponseFeedback"); 
@@ -104,11 +100,10 @@ namespace SurveyProject.Areas.Admin.Controllers
                 return RedirectToAction("ManageFeedback");
             }
 
-            // Truyền thông tin phản hồi đến view để hiển thị cho người dùng
             return View(feedback);
         }
 
-        [HttpPost, ActionName("DeleteFeedback")]
+        [HttpPost, ActionName("DeleteFeedback")]    
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var feedback = await _context.Feedbacks.FindAsync(id);
@@ -126,33 +121,44 @@ namespace SurveyProject.Areas.Admin.Controllers
         }
 
 
-        //[HttpGet]
-        //public IActionResult ThankYou()
+        public IActionResult Detail(int id)
+        {
+            var feedback = _context.Feedbacks.FirstOrDefault(f => f.Id == id);
+            if (feedback == null)
+            {
+                return NotFound();
+            }
+            return View(feedback);
+        }
+
+        [HttpPost]
+        public IActionResult SubmitResponse(int id, string response)
+        {
+
+            TempData["SuccessMessage"] = "Response submitted successfully!";
+
+            return RedirectToAction("ManageFeedback");
+        }
+
+
+        //[HttpPost]
+        //public IActionResult SubmitResponse(int id, string response)
         //{
-        //    return View();
+        //    var feedback = _context.Feedbacks.FirstOrDefault(f => f.Id == id);
+        //    if (feedback == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    feedback.Response = response;
+        //    _context.Feedbacks.Update(feedback);
+        //    _context.SaveChanges();
+
+        //    TempData["SuccessMessage"] = "Phản hồi đã được gửi thành công!";
+        //    return RedirectToAction("Detail", new { id = id });
         //}
 
-        //private async Task SendFeedbackEmail(string recipientEmail, string feedbackContent)
-        //{
-        //    var smtpClient = new SmtpClient("smtp.gmail.com")
-        //    {
-        //        Port = 587,
-        //        Credentials = new NetworkCredential("lequangnam2712005@gmail.com", "mtpl sekm kvii oaf"),
-        //        EnableSsl = true,
-        //    };
 
-        //    var mailMessage = new MailMessage
-        //    {
-        //        From = new MailAddress("lequangnam27012005@gmail.com"),
-        //        Subject = "Thank you for your feedback!",
-        //        Body = $"<p>Dear user,</p><p>Thank you for your feedback:</p><p>{feedbackContent}</p><p>We will respond to you as soon as possible.</p><p>Best regards,</p><p>Your Team</p>",
-        //        IsBodyHtml = true,
-        //    };
-
-        //    mailMessage.To.Add(recipientEmail);
-
-        //    await smtpClient.SendMailAsync(mailMessage);
-        //}
 
 
     }

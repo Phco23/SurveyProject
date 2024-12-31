@@ -1,0 +1,31 @@
+﻿@model SurveyProject.Models.FeedbackModel
+
+@{
+    ViewData["Title"] = "Feedback Detail";
+}
+
+<h1 class="text-center mb-4">Feedback Detail</h1>
+
+<div class="card">
+    <div class="card-body">
+        <!-- Section to display User's feedback -->
+        <h5 class="card-title">User Feedback</h5>
+        <p><strong>UserName:</strong> @Model.UserName</p>
+        <p><strong>Content:</strong></p>
+        <textarea class="form-control" rows="5" readonly>@Model.Content</textarea>
+        <hr />
+
+        <!-- Section to allow Admin to reply -->
+        <h5 class="card-title">Admin Response</h5>
+        <form asp-action="SubmitResponse" method="post">
+            <input type="hidden" name="Id" value="@Model.Id" />
+
+            <!-- Textarea for Admin's response -->
+            <textarea class="form-control" name="Response" rows="5"></textarea>
+
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">Submit Response</button>
+            </div>
+        </form>
+    </div>
+</div>
