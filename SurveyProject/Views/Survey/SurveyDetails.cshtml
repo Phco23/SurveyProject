@@ -3,6 +3,32 @@
 
 <div class="mx-0 mx-sm-auto">
     <div>
+        <!-- Sticky Progress Bar -->
+        <div class="sticky-top bg-light py-2 shadow-sm">
+            <div class="container d-flex align-items-center justify-content-between">
+                <!-- Progress Bar -->
+                <div class="progress w-75">
+                    <div id="progress-bar"
+                         class="progress-bar progress-bar-striped bg-danger"
+                         role="progressbar"
+                         style="width: 0%;"
+                         aria-valuenow="0"
+                         aria-valuemin="0"
+                         aria-valuemax="@Model.Questions.Count">
+                        0%
+                    </div>
+                </div>
+
+                <!-- Cancel Survey Button -->
+                <button type="button"
+                        class="btn btn-outline-danger ms-3"
+                        id="cancel-survey-btn">
+                    Cancel Survey
+                </button>
+            </div>
+        </div>
+
+        <!-- Survey Content -->
         <div class="modal-body">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">Survey</h6>
@@ -15,7 +41,7 @@
             }
             else
             {
-                <form class="px-4" method="post" action="/Survey/SubmitSurvey">
+                <form class="px-4" method="post" action="/Survey/SubmitSurvey" id="survey-form">
                     <input type="hidden" name="SurveyId" value="@Model.SurveyId" />
 
                     <div class="row g-4 d-flex">
@@ -32,7 +58,10 @@
                                         {
                                             var option = question.Options[oIndex];
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="Question_@question.QuestionId" value="@option.OptionId" />
+                                                <input class="form-check-input progress-tracker"
+                                                       type="radio"
+                                                       name="Question_@question.QuestionId"
+                                                       value="@option.OptionId" />
                                                 <label class="form-check-label">@($"{oIndex + 1}. {option.OptionText}")</label>
                                             </div>
                                         }
@@ -43,7 +72,10 @@
                                         {
                                             var option = question.Options[oIndex];
                                             <div class="form-check mb-2">
-                                                <input class="form-check-input" type="checkbox" name="Question_@question.QuestionId" value="@option.OptionId" />
+                                                <input class="form-check-input progress-tracker"
+                                                       type="checkbox"
+                                                       name="Question_@question.QuestionId"
+                                                       value="@option.OptionId" />
                                                 <label class="form-check-label">@($"{oIndex + 1}. {option.OptionText}")</label>
                                             </div>
                                         }
@@ -51,7 +83,10 @@
                                     else if (question.QuestionType == "Text")
                                     {
                                         <div class="form-outline mb-4">
-                                            <textarea name="Question_@question.QuestionId" rows="3" class="form-control" placeholder="Enter text here"></textarea>
+                                            <textarea name="Question_@question.QuestionId"
+                                                      rows="3"
+                                                      class="form-control progress-tracker"
+                                                      placeholder="Enter text here"></textarea>
                                         </div>
                                     }
                                 </div>
@@ -68,4 +103,54 @@
     </div>
 </div>
 
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const totalQuestions = @Model.Questions.Count;
+            const progressBar = document.getElementById('progress-bar');
+            const progressInputs = document.querySelectorAll('.progress-tracker');
+            const answeredQuestions = new Set();
+            const cancelBtn = document.getElementById('cancel-survey-btn');
 
+            // Event Listener for Progress Inputs
+            progressInputs.forEach(input => {
+                input.addEventListener('change', () => {
+                    // Determine question identifier from input name
+                    const questionId = input.name;
+
+                    // Check if the question has been answered
+                    const isAnswered = Array.from(document.querySelectorAll(`[name="${questionId}"]`))
+                        .some(el => el.checked || el.value.trim() !== "");
+
+                    if (isAnswered) {
+                        answeredQuestions.add(questionId);
+                    } else {
+                        answeredQuestions.delete(questionId);
+                    }
+
+                    // Update progress bar
+                    const progress = (answeredQuestions.size / totalQuestions) * 100;
+                    progressBar.style.width = `${progress}%`;
+                    progressBar.setAttribute('aria-valuenow', answeredQuestions.size);
+                    progressBar.textContent = `${Math.round(progress)}%`;
+                });
+            });
+
+            // Event Listener for Cancel Button
+            cancelBtn.addEventListener('click', () => {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Your progress will not be saved!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, cancel!',
+                    cancelButtonText: 'No, keep going'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '/'; // Redirect to home or desired page
+                    }
+                });
+            });
+        });
+    </script>
+}

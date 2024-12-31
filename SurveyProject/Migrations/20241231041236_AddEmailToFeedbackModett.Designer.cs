@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SurveyProject.Repository;
 
@@ -11,9 +12,11 @@ using SurveyProject.Repository;
 namespace SurveyProject.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241231041236_AddEmailToFeedbackModett")]
+    partial class AddEmailToFeedbackModett
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,7 +192,7 @@ namespace SurveyProject.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("EmailSender")
+                    b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsReviewed")
@@ -422,7 +425,7 @@ namespace SurveyProject.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -431,8 +434,6 @@ namespace SurveyProject.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Surveys");
                 });
@@ -559,15 +560,6 @@ namespace SurveyProject.Migrations
                     b.Navigation("Survey");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("SurveyProject.Models.SurveyModel", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("SurveyProject.Models.QuestionModel", b =>

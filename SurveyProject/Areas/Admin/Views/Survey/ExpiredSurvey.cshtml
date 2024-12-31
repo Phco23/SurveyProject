@@ -1,4 +1,5 @@
-@model IEnumerable<SurveyModel>
+@using SurveyProject.Models.ViewModels
+@model IEnumerable<SurveyWithRoleViewModel>
 
 <div class="container mt-4">
         <!-- Header -->
@@ -50,12 +51,10 @@
                                         <div class="d-flex justify-content-between px-4">
                                             <div class="left text-start">
                                                 <p class="mb-2">No.</p>
-                                                <p class="mb-2">Survey Role</p>
                                                 <p class="mb-2">Status</p>
                                             </div>
                                             <div class="right text-end">
                                                 <p class="mb-2">@item.Id</p>
-                                                <p class="mb-2">@item.RoleId</p>
                                                 @* <p class="mb-2 points " style="color: #28a745;">Active</p> *@
                                                 <p class="mb-2" style="color: @(item.IsActive ? "green" : "red")">
                                                     @(item.IsActive ? "Active" : "Inactive")
