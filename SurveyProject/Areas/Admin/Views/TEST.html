@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEST HTML</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<!-- My CSS -->
+	<link rel="stylesheet" href="~/style.css">
+	<!-- Thêm Bootstrap CSS từ CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+	<!-- Customized Bootstrap Stylesheet -->
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body>
+    
+<!-- Active SURVEYS START-->
+<div class="container-xxl py-6">
+    <div class="container">
+        <div class="row g-4">
+            @foreach (var item in Model.Where(i => i.IsActive))
+            {
+                <!-- Survey Item 1 -->
+                <div class="col-lg-5 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="card border-0 shadow-sm">
+                        <div>
+                            <img class="img-fluid" src="/SurveyProject/wwwroot/img/E_0.webp" alt="image_Survey" 
+                                loading="lazy" style="margin: 10px 10px 10px 10px; width: auto; height: auto;">
+                        </div>
+                        <div class="card-body" style="background-color: #F9F9F9;margin: 10px 10px 10px 10px;">
+                            <h5 class="card-title">@item.Title</h5>
+                            <!-- Survey Details -->
+                            <div class="d-flex justify-content-between px-4">
+                                <div class="left text-start"> 
+                                    <p class="mb-2">Survey Role</p>
+                                    <p class="mb-2">Status</p>
+                                </div>
+
+                                <div class="right text-end">
+                                    <p class="mb-2">@item.Id</p>
+                                    <p class="mb-2">@item.RoleId</p>
+                                    <p class="mb-2" style="color: white">
+                                        @(item.IsActive ? "Active" : "Inactive")
+                                    </p>
+                                </div>
+                                
+                            </div>
+                            
+                            <div class="text-center">
+                                <p class="mb-2">
+                                        <i class="bi bi-calendar-event me-1 text-primary"></i> 
+                                        ("MM/dd/yyyy")
+                                        <span class="mx-2">--</span>
+                                        <i class="bi bi-calendar-x me-1 text-danger"></i> 
+                                        ("MM/dd/yyyy")
+                                </p>
+                            </div>
+
+                            <div class="text-center">
+                                <a asp-action="Edit" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-warning me-1" style="border-radius: 10px; color: white;">Edit</a>
+                                <a asp-action="Details" asp-controller="Survey" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1" style="border-radius: 10px; color: white;">Details</a>
+                                <a asp-action="Delete" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-danger" style="border-radius: 10px; color: white;">Delete</a>
+                                <a asp-action="SurveyResponses" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-success" style="border-radius: 10px; color: white;">Responses</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- --- -->
+            }
+            
+        </div>
+    </div>
+</div>
+<!-- Active SURVEYS END-->
+
+
+
+
+
+
+
+
+
+
+</body>
+    <!-- Thêm Bootstrap JS từ CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</html>
