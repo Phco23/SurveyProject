@@ -58,7 +58,6 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a asp-controller="Home" asp-action="Index" class="nav-item nav-link">Home</a>
-                <a asp-controller="Contact" asp-action="Index" class="nav-item nav-link">Contact</a>
                 <a asp-controller="Survey" asp-action="ListSurvey" class="nav-item nav-link">Survey</a>
                 <a asp-controller="Home" asp-action="EditProfiles" asp-route-userId="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" class="nav-item nav-link">
                     Edit Profiles
