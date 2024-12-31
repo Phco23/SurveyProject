@@ -57,13 +57,13 @@ namespace SurveyProject.Areas.Admin.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var userName = User.FindFirst(ClaimTypes.Name)?.Value;
 
-                //var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+                var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
 
                 model.SubmittedAt = DateTime.Now; 
                 model.IsReviewed = false;
                 model.UserId = userId;
                 model.UserName = userName;
-                //model.Email = userEmail;
+                model.Email = userEmail;
 
                 _context.Feedbacks.Add(model);
                 await _context.SaveChangesAsync();
