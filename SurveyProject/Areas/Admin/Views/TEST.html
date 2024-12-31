@@ -22,71 +22,17 @@
 </head>
 <body>
     
-<!-- Active SURVEYS START-->
-<div class="container-xxl py-6">
-    <div class="container">
-        <div class="row g-4">
-            @foreach (var item in Model.Where(i => i.IsActive))
-            {
-                <!-- Survey Item 1 -->
-                <div class="col-lg-5 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="card border-0 shadow-sm">
-                        <div>
-                            <img class="img-fluid" src="/SurveyProject/wwwroot/img/E_0.webp" alt="image_Survey" 
-                                loading="lazy" style="margin: 10px 10px 10px 10px; width: auto; height: auto;">
-                        </div>
-                        <div class="card-body" style="background-color: #F9F9F9;margin: 10px 10px 10px 10px;">
-                            <h5 class="card-title">@item.Title</h5>
-                            <!-- Survey Details -->
-                            <div class="d-flex justify-content-between px-4">
-                                <div class="left text-start"> 
-                                    <p class="mb-2">Survey Role</p>
-                                    <p class="mb-2">Status</p>
-                                </div>
 
-                                <div class="right text-end">
-                                    <p class="mb-2">@item.Id</p>
-                                    <p class="mb-2">@item.RoleId</p>
-                                    <p class="mb-2" style="color: white">
-                                        @(item.IsActive ? "Active" : "Inactive")
-                                    </p>
-                                </div>
-                                
-                            </div>
-                            
-                            <div class="text-center">
-                                <p class="mb-2">
-                                        <i class="bi bi-calendar-event me-1 text-primary"></i> 
-                                        ("MM/dd/yyyy")
-                                        <span class="mx-2">--</span>
-                                        <i class="bi bi-calendar-x me-1 text-danger"></i> 
-                                        ("MM/dd/yyyy")
-                                </p>
-                            </div>
-
-                            <div class="text-center">
-                                <a asp-action="Edit" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-warning me-1" style="border-radius: 10px; color: white;">Edit</a>
-                                <a asp-action="Details" asp-controller="Survey" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1" style="border-radius: 10px; color: white;">Details</a>
-                                <a asp-action="Delete" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-danger" style="border-radius: 10px; color: white;">Delete</a>
-                                <a asp-action="SurveyResponses" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-success" style="border-radius: 10px; color: white;">Responses</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- --- -->
-            }
-            
-        </div>
+    <div style='font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 10px; padding: 20px; background-color: #f9f9f9;'>
+        <h2 style='color: #06BBCC; text-align: center;'>Your Account is Under Review</h2>
+        <p>Dear <strong>{user.UserName}</strong>,</p>
+        <p>Thank you for registering. Your account is currently under review.</p>
+        <p>We will notify you about the result as soon as possible via email.</p>
+        <p style='margin-top: 30px;'>Best regards,<br>eLearning</p>
     </div>
-</div>
-<!-- Active SURVEYS END-->
 
 
-
-
-
-
-
+    
 
 
 

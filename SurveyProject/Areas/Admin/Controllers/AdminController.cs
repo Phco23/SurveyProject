@@ -43,8 +43,16 @@ namespace SurveyProject.Areas.Admin.Controllers
             {
                 user.IsApproved = true; // duyet tai khoan
                 await _userManager.UpdateAsync(user); // cap nhat thong tin ng dung
-                var subject = "Account Approved";
-                var body = $"Dear {user.UserName},<br><br>Your account have been approved, please login with the link below:<br><br><a>https://localhost:7072/Account/Login</a>";
+                var subject = "Your Account is Under Review";
+                var body = $@"
+                                <div style='font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 10px; padding: 20px; background-color: #f9f9f9;'>
+                                    <h2 style='color: #06BBCC; text-align: center;'>Your Account is Under Review</h2>
+                                    <p>Dear <strong>{user.UserName}</strong>,</p>
+                                    <p>Thank you for registering. Your account is currently under review.</p>
+                                    <p>We will notify you about the result as soon as possible via email.</p>
+                                    <p style='margin-top: 30px;'>Best regards,<br>eLearning</p>
+                                </div>
+                            ";
 
                 await _emailService.SendEmailAsync(user.Email, subject, body);
                 return RedirectToAction("PendingApprovals");
