@@ -5,6 +5,7 @@ using SurveyProject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using SurveyProject.Repository;
+using eLearning.Repository;
 
 
 namespace SurveyProject.Areas.Admin.Controllers
@@ -15,12 +16,15 @@ namespace SurveyProject.Areas.Admin.Controllers
     public class AdminController : Controller
     {
         private readonly UserManager<IdentityUserModel> _userManager;
+        private readonly EmailService _emailService;
+
         private readonly DataContext _context;
-        public AdminController(UserManager<IdentityUserModel> userManager, DataContext context)
+        public AdminController(UserManager<IdentityUserModel> userManager, DataContext context, EmailService emailService)
         {
             _userManager = userManager;
             _context = context;
             
+            _emailService = emailService;
         }
 
         public async Task<IActionResult> PendingApprovals()
@@ -39,6 +43,18 @@ namespace SurveyProject.Areas.Admin.Controllers
             {
                 user.IsApproved = true; // duyet tai khoan
                 await _userManager.UpdateAsync(user); // cap nhat thong tin ng dung
+                var subject = "Your Account is Under Review";
+                var body = $@"
+                                <div style='font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 10px; padding: 20px; background-color: #f9f9f9;'>
+                                    <h2 style='color: #06BBCC; text-align: center;'>Your Account is Under Review</h2>
+                                    <p>Dear <strong>{user.UserName}</strong>,</p>
+                                    <p>Thank you for registering. Your account is currently under review.</p>
+                                    <p>We will notify you about the result as soon as possible via email.</p>
+                                    <p style='margin-top: 30px;'>Best regards,<br>eLearning</p>
+                                </div>
+                            ";
+
+                await _emailService.SendEmailAsync(user.Email, subject, body);
                 return RedirectToAction("PendingApprovals");
             }
             return NotFound();

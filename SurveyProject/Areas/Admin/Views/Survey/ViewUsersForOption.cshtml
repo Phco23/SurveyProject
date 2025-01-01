@@ -1,0 +1,39 @@
+﻿@using SurveyProject.Models.ViewModels
+@model CompositeViewModel
+
+<h1>User Responses</h1>
+
+<div>
+    <p><strong>Survey:</strong> @Model.SurveyName</p>
+    <p><strong>Question:</strong> @Model.QuestionName</p>
+    <p><strong>Option:</strong> @Model.OptionName</p>
+</div>
+
+@if (!Model.UserResponses.Any())
+{
+    <div class="alert alert-warning">
+        No users have selected this option.
+    </div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Submitted On</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.UserResponses)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.SubmittedDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<a href="@Url.Action("SurveyResponses", "Survey", new { id = Model.SurveyId, area = "Admin" })" class="btn btn-primary">Back to Survey Responses</a>

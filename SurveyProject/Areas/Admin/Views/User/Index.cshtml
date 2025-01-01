@@ -1,29 +1,40 @@
-﻿<h3>List Product</h3>
-<a asp-action="Create" asp-controller="User">Add Product</a>
+﻿<h2 class="page-title text-primary fw-bold">List Faculty Account</h2>
+<a asp-action="Create" asp-controller="User">
+    <i class="bi bi-plus-circle me-2"></i> Create Account
+</a>
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">User Name</th>
+            <th scope="col">No.</th>
+            <th scope="col">Name</th>
             <th scope="col">Email</th>
-            <th scope="col">Role</th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
+        @{
+            int i = 1;
+        }
         @foreach (var item in Model)
         {
-            <tr>
-                <th scope="row">@item.User.Id</th>
+            @* @if (item.RoleName == "Faculty")
+            { *@
+                <tr>
+                <th scope="row">@i</th>
                 <td>@item.User.UserName</td>
                 <td>@item.User.Email</td>
-                <td>@item.RoleName</td>
                 <td>
-                    <a asp-action="Edit" asp-controller="User" asp-route-Id="@item.User.Id">Edit</a>
-                    <a asp-action="Delete" asp-controller="User" asp-route-Id="@item.User.Id">Delete</a>
+                    <a asp-action="Edit" asp-controller="User" asp-route-Id="@item.User.Id" class="btn btn-primary" style="border-radius: 10px; color: white;padding-right: 10px;">
+                        Edit Profile
+                    </a>
+                    <a asp-action="Delete" asp-controller="User" asp-route-Id="@item.User.Id" class="btn btn-danger" style="border-radius: 10px; color: white;">
+                        <i class="fa fa-trash"></i> Delete
+                    </a>
                 </td>
             </tr>
-        }
+            i++;
+            }
+        @* } *@
     </tbody>
 </table>
 

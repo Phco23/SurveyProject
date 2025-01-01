@@ -1,4 +1,4 @@
-﻿@model UserModel
+﻿﻿@model UserModel
 
 <div class="container-fluid bg-primary py-5 mb-5 page-header">
 	<div class="container py-5">
@@ -72,7 +72,9 @@
                             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                         </div>
 
-
+                        <div class="form-group mb-4">
+                            <strong>*NOTE: After create success, please wait until we send the result to your email. (1-2 days after submit) </strong>
+                        </div>  
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary w-100">Create</button>
                     </form>
@@ -81,4 +83,18 @@
         </div>
     </div>
 </section>
-
+@section Scripts {
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            Swal.fire({
+                title: 'Success!',
+                text: '@TempData["SuccessMessage"]',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(function () {
+                window.location.href = '/account/login'; // Redirect after success
+            });
+        </script>
+    }
+}

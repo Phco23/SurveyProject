@@ -21,7 +21,10 @@ namespace SurveyProject.Repository
         public DbSet<FAQModel> FAQs {get; set;}
         public DbSet<FeedbackModel> Feedbacks { get; set; }
 
-       
+        public DbSet<FeedBackSurveyModel> FeedbackSurvey { get; set; }
+
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

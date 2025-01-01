@@ -1,6 +1,6 @@
 ﻿@model SurveyProject.MappingProfiles.OptionDto
 
-<h2>Add Option</h2>
+<h2 style="color: #06BBCC;">Add Option</h2>
 
 <form asp-action="AddOption" method="post">
     <!-- Hidden field to pass the QuestionId -->
@@ -10,10 +10,12 @@
         <label asp-for="OptionText" class="control-label">Option Text</label>
         <input asp-for="OptionText" class="form-control" />
         <span asp-validation-for="OptionText" class="text-danger"></span>
-    </div>`
+    </div>
+
+    <br>
 
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Add Option</button>
-        <a asp-action="Details" asp-route-id="@ViewBag.QuestionId" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary" style="border-radius: 10px; color: white;">Add Option</button>
+        <a href="javascript:history.back()" class="btn btn-secondary" style="border-radius: 10px; color: white;">Cancel</a>
     </div>
 </form>

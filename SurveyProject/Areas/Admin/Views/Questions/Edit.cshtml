@@ -17,8 +17,10 @@
         <span asp-validation-for="QuestionTypeId" class="text-danger"></span>
     </div>
 
+    <br>
+
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-        <a asp-action="Details" asp-route-id="@Model.SurveyId" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary" style="border-radius: 10px; color: white;">Save Changes</button>
+        <a href="javascript:history.back()" class="btn btn-secondary" style="border-radius: 10px; color: white;">Cancel</a>
     </div>
 </form>

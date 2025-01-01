@@ -61,13 +61,13 @@ namespace SurveyProject.Areas.Admin.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var userName = User.FindFirst(ClaimTypes.Name)?.Value;
 
-                //var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+                var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
 
                 model.SubmittedAt = DateTime.Now; 
                 model.IsReviewed = false;
                 model.UserId = userId;
                 model.UserName = userName;
-                //model.Email = userEmail;
+                model.Email = userEmail;
 
                 _context.Feedbacks.Add(model);
                 await _context.SaveChangesAsync();
@@ -139,26 +139,6 @@ namespace SurveyProject.Areas.Admin.Controllers
 
             return RedirectToAction("ManageFeedback");
         }
-
-
-        //[HttpPost]
-        //public IActionResult SubmitResponse(int id, string response)
-        //{
-        //    var feedback = _context.Feedbacks.FirstOrDefault(f => f.Id == id);
-        //    if (feedback == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    feedback.Response = response;
-        //    _context.Feedbacks.Update(feedback);
-        //    _context.SaveChanges();
-
-        //    TempData["SuccessMessage"] = "Phản hồi đã được gửi thành công!";
-        //    return RedirectToAction("Detail", new { id = id });
-        //}
-
-
 
 
     }

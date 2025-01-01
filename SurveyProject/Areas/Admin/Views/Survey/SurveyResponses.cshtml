@@ -1,0 +1,42 @@
+﻿@model SurveyProject.Models.ViewModels.SurveyResponseViewModel
+
+<h1>@Model.SurveyTitle - Responses</h1>
+
+@foreach (var question in Model.ResponseSummary)
+{
+    <h3>@question.QuestionText</h3>
+    <p><strong>Type:</strong> @question.QuestionTypeName</p>
+
+    @if (question.QuestionTypeName != "Text")
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Responses</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var option in question.Options)
+                {
+                    <tr>
+                        <td>@option.OptionText</td>
+                        <td>
+                            <a href="@Url.Action("ViewUsersForOption", "Survey", new { optionId = option.Id })">
+                                @option.Count
+                            </a>
+                        </td>
+                        <td>@option.Percentage.ToString("F2")%</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <a href="@Url.Action("ViewTextResponses", "Survey", new { questionId = question.QuestionId })" class="btn btn-info">
+            Details
+        </a>
+    }
+}

@@ -14,12 +14,10 @@ namespace SurveyProject.Models
 
         public DateTime SubmittedAt { get; set; }
         public string UserName { get; set; }
-        //[EmailAddress]
-        //public string Email { get; set; }
+        public string Email { get; set; }
 
         public string UserId { get; set; } 
 
         public bool IsReviewed { get; set; } = false;
-        //public string Response { get; set; }
     }
 }

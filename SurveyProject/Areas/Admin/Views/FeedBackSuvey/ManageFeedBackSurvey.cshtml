@@ -1,0 +1,46 @@
+﻿@model IEnumerable<SurveyProject.Models.FeedBackSurveyModel>
+
+@{
+    ViewData["Title"] = "Manage Feedback";
+}
+
+<h1 class="text-center mb-4">Customer Feedback</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>UserName</th>
+                <th>Content</th>
+                <th>Gmail</th>
+
+                <th>Submitted At</th>
+                <th>User ID</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var feedback in Model)
+            {
+                <tr>
+                    <td>@feedback.Id</td>
+                    <td>@feedback.UserName</td>
+                    <td>@feedback.SubmittedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@feedback.UserId</td>
+                    <td>
+                        <a href="@Url.Action("Detail", "Feedback", new { id = feedback.Id })" class="btn btn-info">Detail</a>
+                        <a href="@Url.Action("ConfirmDelete", "Feedback", new { id = feedback.Id })" class="btn btn-warning">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
