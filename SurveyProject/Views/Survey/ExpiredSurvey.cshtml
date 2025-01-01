@@ -59,7 +59,9 @@
                                             <p class="mb-2" style="color: #ff0000;">Expired</p>
                                         </div>
                                     </div>
-                                    <a href="#" class="btn btn-primary" style="width: 100%; border-radius: 10px;">Winner</a>
+                                    <a asp-controller="Survey" asp-action="TopScoreUsers" asp-route-surveyId="@survey.SurveyId" class="btn btn-primary" style="width: 100%; border-radius: 10px;">
+                                        Show Top Score Users
+                                    </a>
                                 </div>
                             </div>
                         </div>

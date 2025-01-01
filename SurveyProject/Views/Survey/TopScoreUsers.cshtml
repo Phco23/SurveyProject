@@ -1,0 +1,26 @@
+﻿@model IEnumerable<dynamic>
+
+<div class="container mt-4">
+    <h3>Top 3 Users</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>User Name</th>
+                <th>Total Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.TotalScore</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="text-center mt-4">
+        <a asp-action="ExpiredSurvey" class="btn btn-secondary">Back to Surveys</a>
+    </div>
+</div>
+

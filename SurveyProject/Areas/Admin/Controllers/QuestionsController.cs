@@ -46,7 +46,8 @@ namespace SurveyProject.Areas.Admin.Controllers
                 Options = question.Options.Select(o => new OptionDto
                 {
                     Id = o.Id,
-                    OptionText = o.OptionText
+                    OptionText = o.OptionText,
+                    Score = o.Score
                 }).ToList()
             };
 
@@ -85,7 +86,8 @@ namespace SurveyProject.Areas.Admin.Controllers
                 var option = new OptionModel
                 {
                     QuestionId = questionId,
-                    OptionText = optionDto.OptionText
+                    OptionText = optionDto.OptionText,
+                    Score = optionDto.Score
                 };
 
                 _context.Options.Add(option);
@@ -217,6 +219,7 @@ namespace SurveyProject.Areas.Admin.Controllers
             {
                 Id = option.Id,
                 OptionText = option.OptionText,
+                Score = option.Score,
                 QuestionId = option.QuestionId
             };
 
@@ -241,6 +244,7 @@ namespace SurveyProject.Areas.Admin.Controllers
                 }
 
                 option.OptionText = optionDto.OptionText;
+                option.Score = optionDto.Score;
                 _context.SaveChanges();
 
                 // Redirect to the survey details page

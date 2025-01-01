@@ -58,6 +58,7 @@
                                     <thead class="table" style="background-color: #6C757D;">
                                         <tr>
                                             <th style="width: 650px; color: white;" >Option Text - @question.QuestionTypeName</th>
+                                            <th style="color: white;">Score</th>
                                             <th style="color: white;">Actions</th>
                                         </tr>
                                     </thead>
@@ -66,6 +67,7 @@
                                         {
                                             <tr>
                                                 <td class="width: 650px; text-break">@option.OptionText</td>
+                                                <td class="width: 650px; text-break">@option.Score</td>
                                                 <td >
                                                     <a asp-controller="Questions" asp-action="EditOption" asp-route-id="@option.Id" class="btn btn-sm btn-warning"
                                                         style="border-radius: 10px; color: white;" >Edit</a>
