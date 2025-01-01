@@ -8,7 +8,9 @@ using SurveyProject.MappingProfiles;
 using SurveyProject.Models;
 using SurveyProject.Models.ViewModels;
 using SurveyProject.Repository;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SurveyProject.Areas.Admin.Controllers
 {
@@ -45,6 +47,7 @@ namespace SurveyProject.Areas.Admin.Controllers
                                               IsActive = survey.IsActive
                                           })
                                       .AsNoTracking()
+                                      .OrderByDescending(x => x.Id)
                                       .ToListAsync();
 
             return View(surveysWithRoles);
@@ -68,6 +71,7 @@ namespace SurveyProject.Areas.Admin.Controllers
                                               IsActive = survey.IsActive
                                           })
                                      .AsNoTracking()
+                                     .OrderByDescending(x => x.Id)
                                      .ToListAsync();
 
             return View(surveysWithRoles);
@@ -101,7 +105,8 @@ namespace SurveyProject.Areas.Admin.Controllers
                     Options = q.Options.Select(o => new OptionDto
                     {
                         Id = o.Id,
-                        OptionText = o.OptionText
+                        OptionText = o.OptionText,
+                        Score = o.Score
                     }).ToList()
                 }).ToList()
             };
@@ -362,11 +367,34 @@ namespace SurveyProject.Areas.Admin.Controllers
                         {
                             var subject = "Survey Updated";
                             var body = $@"
-                        Dear {user.UserName},<br><br>
-                        The survey titled <strong>{survey.Title}</strong> has been updated. Please review it using the link below:<br><br>
-                        <a href='https://localhost:7072/SurveyDetails/{survey.Id}'>View Survey</a><br><br>
-                        Best regards,<br>Your Team
-                            ";
+                                <div style='font-family: Arial, sans-serif;'>
+                                    <div class='container' style='max-width: 600px; background-color: #f8f9fa; padding: 20px; border-radius: 8px;'>
+                                        <h2 style='text-align: center; color: #007bff;'>Survey Update</h2>
+                                        <p style='text-align: center; color: #6c757d;'>Dear {user.UserName},</p>
+        
+                                        <p style='color: #212529;'>We hope that you enjoy our service!</p>
+
+                                        <p style='color: #212529;'>We are always looking to improve our services. As such, we would appreciate it if you could give us 5 minutes of your time to fill out the following survey:</p>
+        
+                                        <div class='alert alert-primary' style='background-color: #cce5ff; color: #004085;'>
+                                            <strong>{survey.Title}</strong>
+                                        </div>
+
+                                        <p style='color: #212529;'>Please review and participate in the survey by clicking the link below:</p>
+        
+                                        <div class='text-center'>
+                                            <a href='https://localhost:7072/SurveyDetails/{survey.Id}' class='btn btn-primary' style='width: 100%; padding: 10px 15px; font-size: 16px; border-radius: 5px;'>View Survey</a>
+                                        </div>
+
+                                        <p style='color: #212529; margin-top: 20px;'>Your feedback will be used to help us improve our products and services.</p>
+
+                                        <p style='color: #212529;'>Many thanks,</p>
+                                        <p style='color: #212529; font-weight: bold;'>eLearning Team</p>
+                                    </div>
+                                </div>
+                                ";
+
+
 
                             await _emailService.SendEmailAsync(user.Email, subject, body);
                         }

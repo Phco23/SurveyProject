@@ -9,6 +9,7 @@ namespace SurveyProject.Models
         public int SurveyId { get; set; }
         public string UserId { get; set; }
         public DateTime SubmittedDate { get; set; }
+        public int TotalScore { get; set; }
         public SurveyModel Survey { get; set; }
         public IdentityUserModel User { get; set; }
 

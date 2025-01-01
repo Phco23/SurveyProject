@@ -43,16 +43,34 @@ namespace SurveyProject.Areas.Admin.Controllers
             {
                 user.IsApproved = true; // duyet tai khoan
                 await _userManager.UpdateAsync(user); // cap nhat thong tin ng dung
-                var subject = "Your Account is Under Review";
+                var subject = "Account Approved";
                 var body = $@"
-                                <div style='font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 10px; padding: 20px; background-color: #f9f9f9;'>
-                                    <h2 style='color: #06BBCC; text-align: center;'>Your Account is Under Review</h2>
-                                    <p>Dear <strong>{user.UserName}</strong>,</p>
-                                    <p>Thank you for registering. Your account is currently under review.</p>
-                                    <p>We will notify you about the result as soon as possible via email.</p>
-                                    <p style='margin-top: 30px;'>Best regards,<br>eLearning</p>
-                                </div>
-                            ";
+                    <div style='font-family: Arial, sans-serif; background-color: #f4f7fa; padding: 20px;'>
+                        <div class='container' style='max-width: 600px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 30px;'>
+                            <h2 style='color: #007bff; text-align: center;'>Account Approved</h2>
+                            <p style='font-size: 16px; color: #555;'>Dear {user.UserName},</p>
+        
+                            <p style='font-size: 16px; color: #555;'>We're excited to let you know that your account has been successfully approved! 🎉</p>
+        
+                            <p style='font-size: 16px; color: #555;'>To get started, simply click the link below to log in:</p>
+        
+                            <div class='text-center'>
+                                <a href='https://localhost:7072/Account/Login' class='btn btn-primary' style='font-size: 16px; padding: 12px 24px; text-decoration: none; border-radius: 5px;'>
+                                    Login Now
+                                </a>
+                            </div>
+        
+                            <p style='font-size: 16px; color: #555; margin-top: 20px;'>If you encounter any issues, feel free to reach out to us. We're here to help!</p>
+        
+                            <p style='font-size: 16px; color: #555;'>Best regards,</p>
+                            <p style='font-size: 16px; color: #555; font-weight: bold;'>The eLearning Team</p>
+        
+                            <hr style='border: 1px solid #f1f1f1;' />
+                            <p style='font-size: 12px; color: #888; text-align: center;'>If you didn't request this, please ignore this email.</p>
+                        </div>
+                    </div>
+                    ";
+
 
                 await _emailService.SendEmailAsync(user.Email, subject, body);
                 return RedirectToAction("PendingApprovals");
@@ -67,6 +85,39 @@ namespace SurveyProject.Areas.Admin.Controllers
             if (user != null)
             {
                 await _userManager.DeleteAsync(user); // xoa tai khoan
+                var subject = "Account Rejected";
+                var body = $@"
+                    <div style='font-family: Arial, sans-serif; background-color: #f4f7fa; padding: 20px;'>
+                        <div class='container' style='max-width: 600px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 30px;'>
+                            <h2 style='color: #dc3545; text-align: center;'>Account Rejected</h2>
+                            <p style='font-size: 16px; color: #555;'>Dear {user.UserName},</p>
+        
+                            <p style='font-size: 16px; color: #555;'>We regret to inform you that your account application has been rejected. 😔</p>
+        
+                            <p style='font-size: 16px; color: #555;'>We understand this may be disappointing, but we encourage you to review your application and ensure all required information is provided. If you'd like to reapply, you are welcome to do so at any time.</p>
+        
+                            <p style='font-size: 16px; color: #555;'>If you believe there has been an error, please don't hesitate to contact us for further clarification or assistance.</p>
+        
+                            <div class='text-center'>
+                                <a href='https://localhost:7072/Contact' class='btn btn-danger' style='font-size: 16px; padding: 12px 24px; text-decoration: none; border-radius: 5px;'>
+                                    Contact Support
+                                </a>
+                            </div>
+        
+                            <p style='font-size: 16px; color: #555; margin-top: 20px;'>We appreciate your understanding and hope to have the opportunity to assist you in the future.</p>
+        
+                            <p style='font-size: 16px; color: #555;'>Best regards,</p>
+                            <p style='font-size: 16px; color: #555; font-weight: bold;'>The eLearning Team</p>
+        
+                            <hr style='border: 1px solid #f1f1f1;' />
+                            <p style='font-size: 12px; color: #888; text-align: center;'>If you have any questions or concerns, please feel free to reach out to us at any time.</p>
+                        </div>
+                    </div>
+                    ";
+
+
+
+                await _emailService.SendEmailAsync(user.Email, subject, body);
                 return RedirectToAction("PendingApprovals");
             }
             return NotFound();
