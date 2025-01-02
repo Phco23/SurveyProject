@@ -23,7 +23,7 @@
                 <button type="button"
                         class="btn btn-outline-danger ms-3"
                         id="cancel-survey-btn">
-                    Cancel Survey
+                    <i class="bi bi-x-circle"></i> Cancel Survey
                 </button>
             </div>
         </div>
@@ -32,7 +32,7 @@
         <div class="modal-body">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">Survey</h6>
-                <h1 class="mb-5">@Model.Title</h1>
+                <h3 class="page-title text-primary fw-bold text-center">@Model.Title</h3>
             </div>
 
             @if (!Model.IsActive)
@@ -44,58 +44,60 @@
                 <form class="px-4" method="post" action="/Survey/SubmitSurvey" id="survey-form">
                     <input type="hidden" name="SurveyId" value="@Model.SurveyId" />
 
-                    <div class="row g-4 d-flex">
-                        @for (int qIndex = 0; qIndex < Model.Questions.Count; qIndex++)
-                        {
-                            var question = Model.Questions[qIndex];
-                            <div class="col-md-6 d-flex align-items-stretch">
-                                <div class="card p-3 border-0 shadow-sm w-100">
-                                    <p class="fw-bold">@($"{qIndex + 1}. {question.QuestionText}")</p>
+                    <div class="row g-4 justify-center">
+                            @for (int qIndex = 0; qIndex < Model.Questions.Count; qIndex++)
+                            {   
+                                var question = Model.Questions[qIndex];
+                                <form class="shadow p-4 rounded bg-light">
+                                        <div class="card p-3 border-0 shadow-sm w-100">
+                                            <p class="fw-bold">@($"{qIndex + 1}. {question.QuestionText}")</p>
 
-                                    @if (question.QuestionType == "Single Choice")
-                                    {
-                                        @for (int oIndex = 0; oIndex < question.Options.Count; oIndex++)
-                                        {
-                                            var option = question.Options[oIndex];
-                                            <div class="form-check">
-                                                <input class="form-check-input progress-tracker"
-                                                       type="radio"
-                                                       name="Question_@question.QuestionId"
-                                                       value="@option.OptionId" />
-                                                <label class="form-check-label">@($"{oIndex + 1}. {option.OptionText}")</label>
-                                            </div>
-                                        }
-                                    }
-                                    else if (question.QuestionType == "Multiple Choice")
-                                    {
-                                        @for (int oIndex = 0; oIndex < question.Options.Count; oIndex++)
-                                        {
-                                            var option = question.Options[oIndex];
-                                            <div class="form-check mb-2">
-                                                <input class="form-check-input progress-tracker"
-                                                       type="checkbox"
-                                                       name="Question_@question.QuestionId"
-                                                       value="@option.OptionId" />
-                                                <label class="form-check-label">@($"{oIndex + 1}. {option.OptionText}")</label>
-                                            </div>
-                                        }
-                                    }
-                                    else if (question.QuestionType == "Text")
-                                    {
-                                        <div class="form-outline mb-4">
-                                            <textarea name="Question_@question.QuestionId"
-                                                      rows="3"
-                                                      class="form-control progress-tracker"
-                                                      placeholder="Enter text here"></textarea>
+                                            @if (question.QuestionType == "Single Choice")
+                                            {
+                                                @for (int oIndex = 0; oIndex < question.Options.Count; oIndex++)
+                                                {
+                                                    var option = question.Options[oIndex];
+                                                    <div class="form-check">
+                                                        <input class="form-check-input progress-tracker"
+                                                            type="radio"
+                                                            name="Question_@question.QuestionId"
+                                                            value="@option.OptionId" />
+                                                        <label class="form-check-label">@($"{oIndex + 1}. {option.OptionText}")</label>
+                                                    </div>
+                                                }
+                                            }
+                                            else if (question.QuestionType == "Multiple Choice")
+                                            {
+                                                @for (int oIndex = 0; oIndex < question.Options.Count; oIndex++)
+                                                {
+                                                    var option = question.Options[oIndex];
+                                                    <div class="form-check mb-2">
+                                                        <input class="form-check-input progress-tracker"
+                                                            type="checkbox"
+                                                            name="Question_@question.QuestionId"
+                                                            value="@option.OptionId" />
+                                                        <label class="form-check-label">@($"{oIndex + 1}. {option.OptionText}")</label>
+                                                    </div>
+                                                }
+                                            }
+                                            else if (question.QuestionType == "Text")
+                                            {
+                                                <div class="form-outline mb-4">
+                                                    <textarea name="Question_@question.QuestionId"
+                                                            rows="3"
+                                                            class="form-control progress-tracker"
+                                                            placeholder="Enter text here"></textarea>
+                                                </div>
+                                            }
                                         </div>
-                                    }
-                                </div>
-                            </div>
-                        }
+                                </form>
+                            }
                     </div>
 
                     <div class="text-center mt-4">
-                        <button class="btn btn-primary px-5" type="submit">Submit</button>
+                        <button class="btn btn-primary px-5" type="submit">
+                            <i class="bi bi-check-circle"></i> Submit
+                        </button>
                     </div>
                 </form>
             }
