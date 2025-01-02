@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SurveyProject.Models;
+using SurveyProject.Models.ViewModels;
 using SurveyProject.Repository;
 using System.Security.Claims;
 
@@ -24,16 +25,45 @@ namespace SurveyProject.Areas.Admin.Controllers
             _signInManager = signInManager;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string role)
         {
             var usersWithRoles = await (from u in _dataContext.Users
                                         join ur in _dataContext.UserRoles on u.Id equals ur.UserId
                                         join r in _dataContext.Roles on ur.RoleId equals r.Id
+                                        where r.Name != "Student" // Exclude "Student" role
                                         select new { User = u, RoleName = r.Name })
                                 .AsNoTracking()
                                 .ToListAsync();
-            return View(usersWithRoles); 
+
+            // Filter users by role if a role is provided
+            if (!string.IsNullOrEmpty(role))
+            {
+                usersWithRoles = usersWithRoles.Where(u => u.RoleName == role).ToList();
+            }
+
+            // Group the filtered users by roles
+            var groupedUsers = usersWithRoles
+                .GroupBy(x => x.RoleName)
+                .Select(g => new RoleGroupViewModel
+                {
+                    RoleName = g.Key,
+                    Users = g.Select(u => new UserViewModel
+                    {
+                        Id = u.User.Id,
+                        UserName = u.User.UserName,
+                        Email = u.User.Email
+                    }).ToList()
+                })
+                .ToList();
+
+            ViewBag.SelectedRole = role; // To highlight the active role
+            ViewBag.Roles = usersWithRoles.Select(u => u.RoleName).Distinct().ToList(); // For navigation
+
+            return View(groupedUsers);
         }
+
+
+
 
         [HttpGet]
         public async Task<IActionResult> Edit(string Id)
@@ -71,28 +101,25 @@ namespace SurveyProject.Areas.Admin.Controllers
                 existingUser.UserName = user.UserName;
                 existingUser.Email = user.Email;
 
-                // Remove old roles
                 var oldRoles = await _userManager.GetRolesAsync(existingUser);
                 foreach (var role in oldRoles)
                 {
                     await _userManager.RemoveFromRoleAsync(existingUser, role);
                 }
 
-                // Add the new role
                 var newRole = await _roleManager.FindByIdAsync(user.RoleId);
                 if (newRole != null)
                 {
                     await _userManager.AddToRoleAsync(existingUser, newRole.Name);
 
-                    // Update the RoleId in AspNetUsers (if applicable)
                     existingUser.RoleId = user.RoleId; // Assuming RoleId is a custom property in your IdentityUser
                 }
 
-                // Check roles after modification
+               
                 var updatedRoles = await _userManager.GetRolesAsync(existingUser);
                 Console.WriteLine("Updated Roles: " + string.Join(", ", updatedRoles));
 
-                // Save changes
+               
                 var updateUserResult = await _userManager.UpdateAsync(existingUser);
                 if (updateUserResult.Succeeded)
                 {
@@ -112,10 +139,6 @@ namespace SurveyProject.Areas.Admin.Controllers
             ViewBag.Roles = new SelectList(roles, "Id", "Name");
             return View(existingUser);
         }
-
-
-
-
 
         [HttpGet]
         public async Task<IActionResult> Delete(string Id)
@@ -144,14 +167,13 @@ namespace SurveyProject.Areas.Admin.Controllers
         {
             var roles = await _roleManager.Roles.ToListAsync();
             ViewBag.Roles = new SelectList(roles, "Id", "Name");
-            return View(new IdentityUserModel());
+            return View(new UserModel()); // Pass the correct model type to the view
         }
-
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IdentityUserModel model, string RoleId)
+        public async Task<IActionResult> Create(UserModel model, string RoleId)
         {
             if (ModelState.IsValid)
             {
@@ -161,14 +183,17 @@ namespace SurveyProject.Areas.Admin.Controllers
                     Email = model.Email
                 };
 
-                var createResult = await _userManager.CreateAsync(newUser, "Default@123"); // mk mac dinh ///+
+                var createResult = await _userManager.CreateAsync(newUser, model.Password);
 
                 if (createResult.Succeeded)
                 {
-                    var role = await _roleManager.FindByIdAsync(RoleId);
-                    if (role != null)
+                    if (!string.IsNullOrEmpty(RoleId))
                     {
-                        await _userManager.AddToRoleAsync(newUser, role.Name);
+                        var role = await _roleManager.FindByIdAsync(RoleId);
+                        if (role != null)
+                        {
+                            await _userManager.AddToRoleAsync(newUser, role.Name);
+                        }
                     }
 
                     TempData["success"] = "User created successfully!";
@@ -185,8 +210,10 @@ namespace SurveyProject.Areas.Admin.Controllers
 
             var roles = await _roleManager.Roles.ToListAsync();
             ViewBag.Roles = new SelectList(roles, "Id", "Name");
-            return View(model);
+            return View(model); // Return the correct model type to the view
         }
+
+
 
     }
 }
