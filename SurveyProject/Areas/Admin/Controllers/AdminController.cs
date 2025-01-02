@@ -110,7 +110,8 @@ namespace SurveyProject.Areas.Admin.Controllers
                 if (result.Succeeded)
                 {
                     TempData["SuccessMessage"] = "Profile updated successfully!";
-                    return RedirectToAction("PendingApprovals"); 
+                    return RedirectToAction("PendingApprovals");
+                    // return RedirectToAction("Index", "Home");
                 }
 
                 foreach (var error in result.Errors)
