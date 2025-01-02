@@ -1,7 +1,4 @@
-﻿@using SurveyProject.Models.ViewModels
-@model SurveyViewModel
-
-<div class="mx-0 mx-sm-auto">
+﻿<div class="mx-0 mx-sm-auto">
     <div>
         <!-- Sticky Progress Bar -->
         <div class="sticky-top bg-light py-2 shadow-sm">
@@ -61,7 +58,8 @@
                                                 <input class="form-check-input progress-tracker"
                                                        type="radio"
                                                        name="Question_@question.QuestionId"
-                                                       value="@option.OptionId" />
+                                                       value="@option.OptionId"
+                                                       required />
                                                 <label class="form-check-label">@($"{oIndex + 1}. {option.OptionText}")</label>
                                             </div>
                                         }
@@ -86,7 +84,7 @@
                                             <textarea name="Question_@question.QuestionId"
                                                       rows="3"
                                                       class="form-control progress-tracker"
-                                                      placeholder="Enter text here"></textarea>
+                                                      placeholder="Enter text here" required></textarea>
                                         </div>
                                     }
                                 </div>
@@ -95,7 +93,7 @@
                     </div>
 
                     <div class="text-center mt-4">
-                        <button class="btn btn-primary px-5" type="submit">Submit</button>
+                        <button id="submit-btn" class="btn btn-primary px-5" type="submit" disabled>Submit</button>
                     </div>
                 </form>
             }
@@ -111,6 +109,8 @@
             const progressInputs = document.querySelectorAll('.progress-tracker');
             const answeredQuestions = new Set();
             const cancelBtn = document.getElementById('cancel-survey-btn');
+            const submitBtn = document.getElementById('submit-btn');
+            const surveyForm = document.getElementById('survey-form');
 
             // Event Listener for Progress Inputs
             progressInputs.forEach(input => {
@@ -133,6 +133,9 @@
                     progressBar.style.width = `${progress}%`;
                     progressBar.setAttribute('aria-valuenow', answeredQuestions.size);
                     progressBar.textContent = `${Math.round(progress)}%`;
+
+                    // Enable/Disable Submit Button
+                    submitBtn.disabled = answeredQuestions.size !== totalQuestions;
                 });
             });
 
@@ -145,7 +148,7 @@
                     showCancelButton: true,
                     confirmButtonText: 'Yes, cancel!',
                     cancelButtonText: 'No, keep going'
-                }).then((result) => {
+                }).then((result) => {   
                     if (result.isConfirmed) {
                         window.location.href = '/'; // Redirect to home or desired page
                     }
