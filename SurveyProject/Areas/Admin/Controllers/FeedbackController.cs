@@ -97,7 +97,40 @@ namespace SurveyProject.Areas.Admin.Controllers
             return RedirectToAction("Detail", new { id });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> SubmitFeedback(FeedbackModel model)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                TempData["ErrorMessage"] = "You must be logged in to submit feedback.";
+                return RedirectToAction("Login", "Account");
+            }
 
+            if (ModelState.IsValid)
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var userName = User.FindFirst(ClaimTypes.Name)?.Value;
+
+                var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+
+                model.SubmittedAt = DateTime.Now;
+                model.IsReviewed = false;
+                model.UserId = userId;
+                model.UserName = userName;
+                model.Email = userEmail;
+
+                _context.Feedbacks.Add(model);
+                await _context.SaveChangesAsync();
+
+
+
+                TempData["SuccessMessage"] = "Feedback submitted successfully!";
+                return Redirect("/Home/ResponseFeedback");
+            }
+
+            TempData["ErrorMessage"] = "Failed to submit feedback. Please try again.";
+            return RedirectToAction("Index", "Home");
+        }
 
         [HttpGet]
 		public IActionResult SubmitFeedback()
