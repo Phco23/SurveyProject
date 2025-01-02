@@ -5,7 +5,7 @@ namespace SurveyProject.Models
 {
     public class UserModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required(ErrorMessage = "Please enter UserName")]
 

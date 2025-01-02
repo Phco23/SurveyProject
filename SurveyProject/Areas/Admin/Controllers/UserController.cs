@@ -66,69 +66,70 @@ namespace SurveyProject.Areas.Admin.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> Edit(string Id)
+        public async Task<IActionResult> Edit(string id)
         {
-            if (string.IsNullOrEmpty(Id))
+            if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
-            var user = await _userManager.FindByIdAsync(Id);
+
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            var roles = await _roleManager.Roles.ToListAsync();
-            ViewBag.Roles = new SelectList(roles, "Id", "Name");
+            var userModel = new UserModel
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email
+            };
 
-            return View(user);
+            var roles = await _roleManager.Roles.ToListAsync();
+            var userRoles = await _userManager.GetRolesAsync(user);
+            ViewBag.Roles = new SelectList(roles, "Id", "Name", roles.FirstOrDefault(r => userRoles.Contains(r.Name))?.Id);
+
+            return View(userModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string Id, IdentityUserModel user)
+        public async Task<IActionResult> Edit(UserModel model, string RoleId)
         {
-            var existingUser = await _userManager.FindByIdAsync(Id);
-            if (existingUser == null)
-            {
-                return NotFound();
-            }
-
-            var currentRoles = await _userManager.GetRolesAsync(existingUser);
-            Console.WriteLine("Current Roles: " + string.Join(", ", currentRoles));
-
             if (ModelState.IsValid)
             {
-                existingUser.UserName = user.UserName;
-                existingUser.Email = user.Email;
-
-                var oldRoles = await _userManager.GetRolesAsync(existingUser);
-                foreach (var role in oldRoles)
+                var user = await _userManager.FindByIdAsync(model.Id);
+                if (user == null)
                 {
-                    await _userManager.RemoveFromRoleAsync(existingUser, role);
+                    return NotFound();
                 }
 
-                var newRole = await _roleManager.FindByIdAsync(user.RoleId);
-                if (newRole != null)
+                user.UserName = model.UserName;
+                user.Email = model.Email;
+
+                var updateResult = await _userManager.UpdateAsync(user);
+
+                if (updateResult.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(existingUser, newRole.Name);
+                    var currentRoles = await _userManager.GetRolesAsync(user);
 
-                    existingUser.RoleId = user.RoleId; // Assuming RoleId is a custom property in your IdentityUser
-                }
+                    if (!string.IsNullOrEmpty(RoleId))
+                    {
+                        var newRole = await _roleManager.FindByIdAsync(RoleId);
+                        if (newRole != null && !currentRoles.Contains(newRole.Name))
+                        {
+                            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                            await _userManager.AddToRoleAsync(user, newRole.Name);
+                        }
+                    }
 
-               
-                var updatedRoles = await _userManager.GetRolesAsync(existingUser);
-                Console.WriteLine("Updated Roles: " + string.Join(", ", updatedRoles));
-
-               
-                var updateUserResult = await _userManager.UpdateAsync(existingUser);
-                if (updateUserResult.Succeeded)
-                {
-                    await _signInManager.RefreshSignInAsync(existingUser);
-                    return RedirectToAction("Index", "User");
+                    TempData["success"] = "User updated successfully!";
+                    return RedirectToAction("Index");
                 }
                 else
                 {
-                    foreach (var error in updateUserResult.Errors)
+                    foreach (var error in updateResult.Errors)
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
@@ -137,7 +138,7 @@ namespace SurveyProject.Areas.Admin.Controllers
 
             var roles = await _roleManager.Roles.ToListAsync();
             ViewBag.Roles = new SelectList(roles, "Id", "Name");
-            return View(existingUser);
+            return View(model);
         }
 
         [HttpGet]
