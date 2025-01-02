@@ -40,6 +40,9 @@
                 <div class="container-xxl py-6">
                     <div class="container"> 
                         <div class="row g-4">
+                            @{
+                                int i = 1;
+                            }
                             @foreach (var item in Model.Where(i => !i.IsActive))
                             {
                                 <!-- Survey Item 1 -->
@@ -47,7 +50,7 @@
                                     <div class="card border-0 shadow-sm">
                                         <img class="img-fluid" src="/img/E_0.webp" alt="image_Survey" loading="lazy" style="margin: 10px 10px 10px 10px;">
                                         <div class="card-body" style="background-color: #F9F9F9;margin: 10px 10px 10px 10px;">
-                                            <h5 class="card-title" style="font: 20px Nunito, sans-serif">@item.Title</h5>
+                                            <h5 class="card-title text-center" style="font: 20px Nunito, sans-serif">@item.Title</h5>
                                             <!-- Survey Details -->
                                             <div class="d-flex justify-content-between px-4">
                                                 <div class="left text-start">
@@ -55,8 +58,7 @@
                                                     <p class="mb-2">Status</p>
                                                 </div>
                                                 <div class="right text-end">
-                                                    <p class="mb-2">@item.Id</p>
-                                                    @* <p class="mb-2 points " style="color: #28a745;">Active</p> *@
+                                                    <p class="mb-2">@i</p>
                                                     <p class="mb-2" style="color: @(item.IsActive ? "green" : "red")">
                                                         @(item.IsActive ? "Active" : "Inactive")
                                                     </p>
@@ -82,6 +84,7 @@
                                     </div>
                                 </div>
                                 <!-- --- -->
+                                i++;
                             }
                             
                         </div>
