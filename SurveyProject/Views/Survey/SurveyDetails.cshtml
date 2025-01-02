@@ -1,4 +1,4 @@
-﻿﻿@using SurveyProject.Models.ViewModels
+﻿﻿﻿@using SurveyProject.Models.ViewModels
 @model SurveyViewModel
 
 <div class="mx-0 mx-sm-auto">
@@ -32,7 +32,7 @@
         <div class="modal-body">
             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
                 <h6 class="section-title bg-white text-center text-primary px-3">Survey</h6>
-                <h1 class="mb-5">@Model.Title</h1>
+                <h1 class="mb-5" style="color:#06BBCC">@Model.Title</h1>
             </div>
 
             @if (!Model.IsActive)
@@ -43,54 +43,54 @@
             {
                 <form class="px-4" method="post" action="/Survey/SubmitSurvey" id="survey-form">
                     <input type="hidden" name="SurveyId" value="@Model.SurveyId" />
-
-                    <div class="row g-4 d-flex">
+                    
+                    <div class="row g-4 ">
                         @for (int qIndex = 0; qIndex < Model.Questions.Count; qIndex++)
                         {
                             var question = Model.Questions[qIndex];
-                            <div class="col-md-6 d-flex align-items-stretch">
-                                <div class="card p-3 border-0 shadow-sm w-100">
-                                    <p class="fw-bold">@($"{qIndex + 1}. {question.QuestionText}")</p>
+                                <div class="align-items-stretch">
+                                    <div class="card p-3 border-0 shadow-sm w-100">
+                                        <p class="fw-bold">@($"{qIndex + 1}. {question.QuestionText}")</p>
 
-                                    @if (question.QuestionType == "Single Choice")
-                                    {
-                                        @for (int oIndex = 0; oIndex < question.Options.Count; oIndex++)
+                                        @if (question.QuestionType == "Single Choice")
                                         {
-                                            var option = question.Options[oIndex];
-                                            <div class="form-check">
-                                                <input class="form-check-input progress-tracker"
-                                                       type="radio"
-                                                       name="Question_@question.QuestionId"
-                                                       value="@option.OptionId" />
-                                                <label class="form-check-label">@($"{oIndex + 1}. {option.OptionText}")</label>
+                                            @for (int oIndex = 0; oIndex < question.Options.Count; oIndex++)
+                                            {
+                                                var option = question.Options[oIndex];
+                                                <div class="form-check">
+                                                    <input class="form-check-input progress-tracker"
+                                                        type="radio"
+                                                        name="Question_@question.QuestionId"
+                                                        value="@option.OptionId" />
+                                                    <label class="form-check-label">@($"{oIndex + 1}. {option.OptionText}")</label>
+                                                </div>
+                                            }
+                                        }
+                                        else if (question.QuestionType == "Multiple Choice")
+                                        {
+                                            @for (int oIndex = 0; oIndex < question.Options.Count; oIndex++)
+                                            {
+                                                var option = question.Options[oIndex];
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input progress-tracker"
+                                                        type="checkbox"
+                                                        name="Question_@question.QuestionId"
+                                                        value="@option.OptionId" />
+                                                    <label class="form-check-label">@($"{oIndex + 1}. {option.OptionText}")</label>
+                                                </div>
+                                            }
+                                        }
+                                        else if (question.QuestionType == "Text")
+                                        {
+                                            <div class="form-outline mb-4">
+                                                <textarea name="Question_@question.QuestionId"
+                                                        rows="3"
+                                                        class="form-control progress-tracker"
+                                                        placeholder="Enter text here"></textarea>
                                             </div>
                                         }
-                                    }
-                                    else if (question.QuestionType == "Multiple Choice")
-                                    {
-                                        @for (int oIndex = 0; oIndex < question.Options.Count; oIndex++)
-                                        {
-                                            var option = question.Options[oIndex];
-                                            <div class="form-check mb-2">
-                                                <input class="form-check-input progress-tracker"
-                                                       type="checkbox"
-                                                       name="Question_@question.QuestionId"
-                                                       value="@option.OptionId" />
-                                                <label class="form-check-label">@($"{oIndex + 1}. {option.OptionText}")</label>
-                                            </div>
-                                        }
-                                    }
-                                    else if (question.QuestionType == "Text")
-                                    {
-                                        <div class="form-outline mb-4">
-                                            <textarea name="Question_@question.QuestionId"
-                                                      rows="3"
-                                                      class="form-control progress-tracker"
-                                                      placeholder="Enter text here"></textarea>
-                                        </div>
-                                    }
+                                    </div>
                                 </div>
-                            </div>
                         }
                     </div>
 
