@@ -1,14 +1,10 @@
-﻿@model IdentityUserModel
-
-@{
-    ViewData["Title"] = "Create User";
-}
+﻿@model SurveyProject.Models.UserModel
 
 <div class="container">
-    <h2 class="page-title text-primary fw-bold">Create Account</h2>
-    <form asp-action="Create" method="post">
+    <h4 class="page-title text-primary fw-bold text-center">Create Account</h4>
+    <form asp-action="Create" method="post" class="shadow p-4 rounded bg-light">
         <div class="mb-3">
-            <label asp-for="UserName" class="form-label">Faculty Name</label>
+            <label asp-for="UserName" class="form-label">Username</label>
             <input asp-for="UserName" class="form-control" placeholder="Enter username" />
             <span asp-validation-for="UserName" class="text-danger"></span>
         </div>
@@ -20,12 +16,25 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="RoleId" class="form-label">Role</label>
-            <input asp-for="RoleId" class="form-control" value="Faculty" readonly/>
-            <span asp-validation-for="RoleId" class="text-danger"></span>
+            <label asp-for="Password" class="form-label">Password</label>
+            <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-primary px-5" style="border-radius: 10px; color: white;">Create</button>
-        <a asp-action="Index" class="btn btn-secondary" style="border-radius: 10px; color: white;">Cancel</a>
+        <div class="mb-3">
+            <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+            <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label for="RoleId" class="form-label">Role</label>
+            <select name="RoleId" class="form-select" asp-items="ViewBag.Roles">
+                <option value="">-- Select Role --</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary px-5" style="border-radius: 10px;">Create</button>
+        <a asp-action="Index" class="btn btn-secondary" style="border-radius: 10px;">Cancel</a>
     </form>
 </div>

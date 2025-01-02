@@ -19,5 +19,9 @@ namespace SurveyProject.Models
         public string UserId { get; set; } 
 
         public bool IsReviewed { get; set; } = false;
+<<<<<<< HEAD
+=======
+        public string Response { get; set; }
+>>>>>>> nam3
     }
 }

@@ -13,11 +13,12 @@ namespace SurveyProject.Models
 
         [Required(ErrorMessage = "Please enter Email"), EmailAddress]
 
-        public string Email { get; set; }
+        public string Email { get; set; }   
 
-        [DataType(DataType.Password), Required(ErrorMessage = "Please enter Password")]
-
+        [NotMapped]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
+
         [NotMapped]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Passwords do not match")]

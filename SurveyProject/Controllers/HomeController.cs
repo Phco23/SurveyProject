@@ -52,17 +52,17 @@ namespace SurveyProject.Controllers
                 userId = _userManager.GetUserId(User);
                 if (string.IsNullOrEmpty(userId))
                 {
-                    return NotFound(); 
+                    return NotFound();
                 }
             }
 
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
-            return View(user); 
+            return View(user);
         }
 
         [HttpPost]
@@ -70,7 +70,7 @@ namespace SurveyProject.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model); 
+                return View(model);
             }
 
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == model.Id);
@@ -79,8 +79,8 @@ namespace SurveyProject.Controllers
                 return NotFound();
             }
 
-            user.UserName = model.UserName; 
-            user.Email = model.Email; 
+            user.UserName = model.UserName;
+            user.Email = model.Email;
             user.IsApproved = model.IsApproved;
 
             //thay doi mk

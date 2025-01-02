@@ -1,34 +1,42 @@
 ﻿@model List<SurveyProject.Models.IdentityUserModel>
 
-<h2 class="page-title text-primary fw-bold">Pending Approvals</h2>
+<form class="shadow p-4 rounded bg-light">
+    <h2 class="page-title text-primary fw-bold">Pending Approvals</h2>
+    <p class="page-title-subtitle text-muted">Manage approve or reject accounts</p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <td>@user.UserName</td>
-                <td>@user.Email</td>
-                <td>
-                    <form asp-action="ApproveUser" method="post" style="display:inline;">
-                        <input type="hidden" name="userId" value="@user.Id" />
-                        <button type="submit" class="btn btn-primary" style="border-radius: 10px; color: white;">Approve</button>
-                    </form>
-                    <form asp-action="RejectUser" method="post" style="display:inline;">
-                        <input type="hidden" name="userId" value="@user.Id" />
-                        <button type="submit" class="btn btn-danger" style="border-radius: 10px; color: white;">
-                            <i class="fa fa-trash"></i> Reject
-                        </button>   
-                    </form>
-                </td>
+                <th>No.</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @{
+                int i =1;
+            }
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <form asp-action="ApproveUser" method="post" style="display:inline;">
+                            <input type="hidden" name="userId" value="@user.Id" />
+                            <button type="submit" class="btn btn-primary" style="border-radius: 10px; color: white;">Approve</button>
+                        </form>
+                        <form asp-action="RejectUser" method="post" style="display:inline;">
+                            <input type="hidden" name="userId" value="@user.Id" />
+                            <button type="submit" class="btn btn-danger" style="border-radius: 10px; color: white;">
+                                <i class="fa fa-trash"></i> Reject
+                            </button>   
+                        </form>
+                    </td>
+                </tr>
+            i++;
+            }
+        </tbody>
+    </table>
+</form>

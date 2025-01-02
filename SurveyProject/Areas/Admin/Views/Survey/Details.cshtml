@@ -1,4 +1,4 @@
-﻿@using SurveyProject.Models.ViewModels
+﻿﻿@using SurveyProject.Models.ViewModels
 @model SurveyDetailsViewModel
 
 <div class="container mt-5">
@@ -18,14 +18,14 @@
 
     <div class="row">
         <div class="col text-center">
-            <a asp-controller="Questions" asp-action="Create" asp-route-surveyId="@Model.Id" class="btn btn-primary px-4" 
-                style="border-radius: 10px; color: white;">Add Question</a>
+            <a asp-controller="Questions" asp-action="Create" asp-route-surveyId="@Model.Id" class="btn btn-primary px-4"
+               style="border-radius: 10px; color: white;">Add Question</a>
         </div>
     </div>
-    
+
     <br>
 
-    
+
 
     @if (Model.Questions.Any())
     {
@@ -42,12 +42,12 @@
                                 <strong>@i. @question.QuestionText </strong>
                             </div>
                             <div class="d-flex justify-content-end">
-                                <a asp-controller="Questions" asp-action="Edit" asp-route-id="@question.Id" 
-                                class="btn btn-sm btn-warning ms-2"
-                                style="border-radius: 10px; color: white;">Edit</a>
-                                <a asp-controller="Questions" asp-action="Delete" asp-route-id="@question.Id" 
-                                class="btn btn-sm btn-danger ms-2"
-                                style="border-radius: 10px; color: white;">Delete</a>
+                                <a asp-controller="Questions" asp-action="Edit" asp-route-id="@question.Id"
+                                   class="btn btn-sm btn-warning ms-2"
+                                   style="border-radius: 10px; color: white;">Edit</a>
+                                <a asp-controller="Questions" asp-action="Delete" asp-route-id="@question.Id"
+                                   class="btn btn-sm btn-danger ms-2"
+                                   style="border-radius: 10px; color: white;">Delete</a>
                             </div>
 
                         </div>
@@ -57,7 +57,8 @@
                                 <table class="table table-bordered ">
                                     <thead class="table" style="background-color: #6C757D;">
                                         <tr>
-                                            <th style="width: 650px; color: white;" >Option Text - @question.QuestionTypeName</th>
+                                            <th style="width: 650px; color: white;">Option Text - @question.QuestionTypeName</th>
+                                            <th style="color: white;">Score</th>
                                             <th style="color: white;">Actions</th>
                                         </tr>
                                     </thead>
@@ -66,9 +67,10 @@
                                         {
                                             <tr>
                                                 <td class="width: 650px; text-break">@option.OptionText</td>
-                                                <td >
+                                                <td class="width: 650px; text-break">@option.Score</td>
+                                                <td>
                                                     <a asp-controller="Questions" asp-action="EditOption" asp-route-id="@option.Id" class="btn btn-sm btn-warning"
-                                                        style="border-radius: 10px; color: white;" >Edit</a>
+                                                       style="border-radius: 10px; color: white;">Edit</a>
                                                     <form asp-controller="Questions" asp-action="DeleteOption" asp-route-id="@option.Id" method="post" style="display:inline;">
                                                         <button type="submit" class="btn btn-sm btn-danger" style="border-radius: 10px; color: white;">Delete</button>
                                                     </form>
@@ -77,14 +79,14 @@
                                         }
                                     </tbody>
                                 </table>
-                                <a asp-controller="Questions" asp-action="AddOption" asp-route-questionId="@question.Id" class="btn btn-sm btn-primary mt-2" 
-                                    style="border-radius: 10px; color: white;">Add Option</a>
+                                <a asp-controller="Questions" asp-action="AddOption" asp-route-questionId="@question.Id" class="btn btn-sm btn-primary mt-2"
+                                   style="border-radius: 10px; color: white;">Add Option</a>
                             }
                             else
                             {
                                 <p class="text-muted">Options are not available for this question type.</p>
                             }
-                            
+
                         </div>
                     </div>
                 </div>

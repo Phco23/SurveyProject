@@ -1,42 +1,59 @@
 ﻿@model SurveyProject.Models.ViewModels.SurveyResponseViewModel
 
-<h1>@Model.SurveyTitle - Responses</h1>
+<form class="shadow p-4 rounded bg-light">
+    <div class="mb-4 text-center">
+        <h2 class="page-title text-primary fw-bold">@Model.SurveyTitle - Responses</h2>
+    </div>
 
-@foreach (var question in Model.ResponseSummary)
-{
-    <h3>@question.QuestionText</h3>
-    <p><strong>Type:</strong> @question.QuestionTypeName</p>
+    @{
+        int i = 1;
+    }
+    @foreach (var question in Model.ResponseSummary)
+    {
+        <div class="mb-5">
+            <div class="mb-3">
+                <h4 class="fw-bold text-secondary">
+                    @i. @question.QuestionText
+                </h4>
+                <p><strong>Type:</strong> <span class="text-info">@question.QuestionTypeName</span></p>
+            </div>
 
-    @if (question.QuestionTypeName != "Text")
-    {
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Option</th>
-                    <th>Responses</th>
-                    <th>Percentage</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var option in question.Options)
-                {
-                    <tr>
-                        <td>@option.OptionText</td>
-                        <td>
-                            <a href="@Url.Action("ViewUsersForOption", "Survey", new { optionId = option.Id })">
-                                @option.Count
-                            </a>
-                        </td>
-                        <td>@option.Percentage.ToString("F2")%</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            @if (question.QuestionTypeName != "Text")
+            {
+                <table class="table table-bordered table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>Option</th>
+                            <th>Responses</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var option in question.Options)
+                        {
+                            <tr>
+                                <td>@option.OptionText</td>
+                                <td>
+                                    <a href="@Url.Action("ViewUsersForOption", "Survey", new { optionId = option.Id })" class="text-primary fw-bold">
+                                        @option.Count
+                                    </a>
+                                </td>
+                                <td>@option.Percentage.ToString("F2")%</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="text-center">
+                    <a href="@Url.Action("ViewTextResponses", "Survey", new { questionId = question.QuestionId })" 
+                       class="btn btn-info text-white">
+                        <i class="bi bi-chat-text me-1"></i> View Text Responses
+                    </a>
+                </div>
+            }
+        </div>
+        i++;
     }
-    else
-    {
-        <a href="@Url.Action("ViewTextResponses", "Survey", new { questionId = question.QuestionId })" class="btn btn-info">
-            Details
-        </a>
-    }
-}
+</form>

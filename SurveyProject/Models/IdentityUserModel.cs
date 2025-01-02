@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SurveyProject.Models
 {
@@ -6,5 +8,6 @@ namespace SurveyProject.Models
     {
         public string RoleId { get; set; }
         public bool IsApproved { get; set; } = false;
+       
     }
 }

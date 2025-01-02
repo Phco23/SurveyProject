@@ -1,90 +1,92 @@
 @using SurveyProject.Models.ViewModels
 @model IEnumerable<SurveyWithRoleViewModel>
 
-<div class="container mt-4">
-        <!-- Header -->
-        <app-quickpoll-header-nav-tabs class="container py-4">
-            <!-- Header Title -->
-            <div class="mb-4">
-                <h2 class="page-title text-primary fw-bold">Surveys</h2>
-                <p class="page-title-subtitle text-muted">
-                    Management Surveys and add!
-                </p>
-            </div>
+<form class="shadow p-4 rounded bg-light">
+    <div class="container mt-4">
+            <!-- Header -->
+            <app-quickpoll-header-nav-tabs class="container py-4"> 
+                <!-- Header Title -->
+                <div class="mb-4">
+                    <h2 class="page-title text-primary fw-bold">Surveys</h2>
+                    <p class="page-title-subtitle text-muted">
+                        Management Surveys and add!
+                    </p>
+                </div>
 
-            <!-- Navigation Tabs -->
-            <div class="events-nav">
-                <ul class="nav nav-tabs ">
-                    <li class="nav-item">
-                        <a asp-action="Index" class="nav-link ">
-                            <i class="bi bi-clipboard-check"></i> Active Surveys
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-action="ExpiredSurvey" class="nav-link active">
-                            <i class="bi bi-clipboard-x"></i> Expired Surveys
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-action="Create" asp-controller="Survey" class="nav-link">
-                            <i class="bi bi-plus-circle me-2"></i> Add Survey
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </app-quickpoll-header-nav-tabs>
-    
-    <hr>
-    <!-- Active SURVEYS START-->
-            <div class="container-xxl py-6">
-                <div class="container"> 
-                    <div class="row g-4">
-                        @foreach (var item in Model.Where(i => !i.IsActive))
-                        {
-                            <!-- Survey Item 1 -->
-                            <div class="col-lg-5 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                <div class="card border-0 shadow-sm">
-                                    <img class="img-fluid" src="/img/E_0.webp" alt="image_Survey" loading="lazy" style="margin: 10px 10px 10px 10px;">
-                                    <div class="card-body" style="background-color: #F9F9F9;margin: 10px 10px 10px 10px;">
-                                        <h5 class="card-title">@item.Title</h5>
-                                        <!-- Survey Details -->
-                                        <div class="d-flex justify-content-between px-4">
-                                            <div class="left text-start">
-                                                <p class="mb-2">No.</p>
-                                                <p class="mb-2">Status</p>
+                <!-- Navigation Tabs -->
+                <div class="events-nav">
+                    <ul class="nav nav-tabs ">
+                        <li class="nav-item">
+                            <a asp-action="Index" class="nav-link ">
+                                <i class="bi bi-clipboard-check"></i> Active Surveys
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="ExpiredSurvey" class="nav-link active">
+                                <i class="bi bi-clipboard-x"></i> Expired Surveys
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Create" asp-controller="Survey" class="nav-link">
+                                <i class="bi bi-plus-circle me-2"></i> Create Survey
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </app-quickpoll-header-nav-tabs>
+        
+        <hr>
+        <!-- Active SURVEYS START-->
+                <div class="container-xxl py-6">
+                    <div class="container"> 
+                        <div class="row g-4">
+                            @foreach (var item in Model.Where(i => !i.IsActive))
+                            {
+                                <!-- Survey Item 1 -->
+                                <div class="col-lg-5 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                    <div class="card border-0 shadow-sm">
+                                        <img class="img-fluid" src="/img/E_0.webp" alt="image_Survey" loading="lazy" style="margin: 10px 10px 10px 10px;">
+                                        <div class="card-body" style="background-color: #F9F9F9;margin: 10px 10px 10px 10px;">
+                                            <h5 class="card-title" style="font: 20px Nunito, sans-serif">@item.Title</h5>
+                                            <!-- Survey Details -->
+                                            <div class="d-flex justify-content-between px-4">
+                                                <div class="left text-start">
+                                                    <p class="mb-2">No.</p>
+                                                    <p class="mb-2">Status</p>
+                                                </div>
+                                                <div class="right text-end">
+                                                    <p class="mb-2">@item.Id</p>
+                                                    @* <p class="mb-2 points " style="color: #28a745;">Active</p> *@
+                                                    <p class="mb-2" style="color: @(item.IsActive ? "green" : "red")">
+                                                        @(item.IsActive ? "Active" : "Inactive")
+                                                    </p>
+
+                                                </div>
                                             </div>
-                                            <div class="right text-end">
-                                                <p class="mb-2">@item.Id</p>
-                                                @* <p class="mb-2 points " style="color: #28a745;">Active</p> *@
-                                                <p class="mb-2" style="color: @(item.IsActive ? "green" : "red")">
-                                                    @(item.IsActive ? "Active" : "Inactive")
+                                            <div class="text-center">
+                                                <p class="mb-2">
+                                                        <i class="bi bi-calendar-event me-1 text-primary"></i> 
+                                                        @DateTime.Now.ToString("MM/dd/yyyy")
+                                                        <span class="mx-2">--</span>
+                                                        <i class="bi bi-calendar-x me-1 text-danger"></i> 
+                                                        @item.ExpiredDate.ToString("MM/dd/yyyy")
                                                 </p>
-
                                             </div>
-                                        </div>
-                                        <div class="text-center">
-                                            <p class="mb-2">
-                                                    <i class="bi bi-calendar-event me-1 text-primary"></i> 
-                                                    @item.CreatedDate.ToString("MM/dd/yyyy")
-                                                    <span class="mx-2">--</span>
-                                                    <i class="bi bi-calendar-x me-1 text-danger"></i> 
-                                                    @item.ExpiredDate.ToString("MM/dd/yyyy")
-                                            </p>
-                                        </div>
-                                        <div class="text-center">
-                                            <a asp-action="Edit" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-warning me-1" style="border-radius: 10px; color: white;">Edit</a>
-                                            <a asp-action="Details" asp-controller="Survey" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1" style="border-radius: 10px; color: white;">Details</a>
-                                            <a asp-action="Delete" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-danger" style="border-radius: 10px; color: white;">Delete</a>
-                                            <a asp-action="SurveyResponses" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-success" style="border-radius: 10px; color: white;">Responses</a>
+                                            <div class="text-center">
+                                                <a asp-action="Edit" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-warning me-1" style="border-radius: 10px; color: white;">Edit</a>
+                                                <a asp-action="Details" asp-controller="Survey" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1" style="border-radius: 10px; color: white;">Details</a>
+                                                <a asp-action="Delete" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-danger" style="border-radius: 10px; color: white;">Delete</a>
+                                                <a asp-action="SurveyResponses" asp-controller="Survey" asp-route-Id="@item.Id" class="btn btn-sm btn-success" style="border-radius: 10px; color: white;">Responses</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- --- -->
-                        }
-                        
+                                <!-- --- -->
+                            }
+                            
+                        </div>
                     </div>
                 </div>
-            </div>
-    <!-- Active SURVEYS END-->
-</div>
+        <!-- Active SURVEYS END-->
+    </div>
+</form>

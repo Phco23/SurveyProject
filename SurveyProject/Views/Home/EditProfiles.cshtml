@@ -5,7 +5,7 @@
 }
 
 <div class="container mt-5">
-    <h2 class="mb-4 text-center">Edit Profile</h2>
+    <h2 class="mb-4 text-center" style="color: #06BBCC;">Edit Profile</h2>
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -20,7 +20,7 @@
         <!-- User Name -->
         <div class="mb-3">
             <label asp-for="UserName" class="form-label fw-bold">Username</label>
-            <input asp-for="UserName" class="form-control"  />
+            <input asp-for="UserName" class="form-control" />
         </div>
 
         <!-- Email -->

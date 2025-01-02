@@ -51,7 +51,8 @@ namespace SurveyProject.Controllers
             {
                 SurveyId = surveyId,
                 UserId = userId,
-                SubmittedDate = DateTime.UtcNow
+                SubmittedDate = DateTime.UtcNow,
+                TotalScore = 0 // Initialize score
             };
 
             // Save the ResponseModel to get its ID
@@ -60,6 +61,7 @@ namespace SurveyProject.Controllers
 
             // Initialize a list to store ResponseDetails
             var responseDetails = new List<ResponseDetailsModel>();
+            var totalScore = 0;
 
             // Process form data for each question
             foreach (var key in form.Keys.Where(k => k.StartsWith("Question_")))
@@ -87,23 +89,28 @@ namespace SurveyProject.Controllers
                         .ToList();
 
                     // Validate option IDs
-                    var validOptionIds = await _context.Options
+                    var validOptions = await _context.Options
                         .Where(o => optionIds.Contains(o.Id) && o.QuestionId == questionId)
-                        .Select(o => o.Id)
                         .ToListAsync();
 
-                    if (!validOptionIds.Any())
+                    if (!validOptions.Any())
                     {
                         // Log or handle invalid options
                         continue;
                     }
 
-                    responseDetails.AddRange(validOptionIds.Select(optionId => new ResponseDetailsModel
+                    foreach (var option in validOptions)
                     {
-                        ResponseId = response.Id,
-                        QuestionId = questionId,
-                        OptionId = optionId
-                    }));
+                        responseDetails.Add(new ResponseDetailsModel
+                        {
+                            ResponseId = response.Id,
+                            QuestionId = questionId,
+                            OptionId = option.Id
+                        });
+
+                        // Add the option's score to the total score
+                        totalScore += option.Score;
+                    }
                 }
                 else if (question.QuestionType.Name == "Text")
                 {
@@ -122,14 +129,47 @@ namespace SurveyProject.Controllers
             if (responseDetails.Any())
             {
                 _context.ResponseDetails.AddRange(responseDetails);
-                await _context.SaveChangesAsync();
             }
 
+            // Update and save the total score in the response
+            response.TotalScore = totalScore;
+            _context.Responses.Update(response);
 
+            await _context.SaveChangesAsync();
 
             // Redirect to a confirmation page
             return RedirectToAction("SurveySubmitted");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> TopScoreUsers(int surveyId)
+        {
+            // Ensure the survey exists
+            var survey = await _context.Surveys.FindAsync(surveyId);
+            if (survey == null || survey.ExpiredDate >= DateTime.UtcNow)
+                return NotFound();
+
+            // Fetch the responses and calculate scores
+            var responseDetails = await _context.ResponseDetails
+                .Include(rd => rd.Option)
+                .Where(rd => rd.Response.SurveyId == surveyId && rd.Option != null)
+                .GroupBy(rd => rd.Response.UserId)
+                .Select(g => new
+                {
+                    UserId = g.Key,
+                    UserName = _context.Users.FirstOrDefault(u => u.Id == g.Key).UserName,
+                    TotalScore = g.Sum(rd => rd.Option != null ? rd.Option.Score : 0) // Check if Option is null before accessing Score
+                })
+                .OrderByDescending(u => u.TotalScore)
+                .Take(3)
+                .ToListAsync();
+
+            // Pass the result to the view
+            return View(responseDetails);
+        }
+
+
+
 
 
 

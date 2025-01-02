@@ -30,7 +30,7 @@
 	<section id="sidebar">
 		<a href="#" class="brand " style="color: #06BBCC;">
 			<i class='bx bxs-smile'></i>
-			<span class="text">AdminHub</span>
+			<span class="text">adminElearning</span>
 		</a>
 		<hr>
 		<ul class="side-menu top">
@@ -58,33 +58,28 @@
 			<li class="nav-item">
 				<a asp-action="Index" asp-controller="Survey">
 					<i b-xymbtu3x3q="" class="bx bx-note" style="color: #06BBCC;"></i>
-					<span class="text">Survey</span>
+					<span class="text">Manage Survey</span>
 				</a>
 			</li>
 
 			<li class="nav-item">
 				<a asp-action="Index" asp-controller="FAQ">
 					<i b-xymbtu3x3q="" class="bx bxs-help-circle" style="color: #06BBCC;"></i>
-					<span class="text">FAQ</span>
+					<span class="text">Manage FAQ</span>
 				</a>
 			</li>
 
-			<li>
-				<a asp-area="Admin" asp-controller="Feedback" asp-action="ManageFeedback">
-					<i class="bx bxs-feedback"></i>
+			<li class="nav-item">
+				<a asp-controller="Feedback" asp-action="ManageFeedback">
+					<i class="bx bx-message-dots me-2" style="color: #06BBCC;"></i> 
 					<span class="text">Manage Feedback</span>
 				</a>
 			</li>
 
 
+
 		</ul>
 		<ul class="side-menu">
-			@* <li>	
-				<a href="#">
-					<i class='bx bxs-cog'></i>
-					<span class="text">Settings</span>
-				</a>
-			</li> *@
 			<li>
 				<a href="#" class="logout">
 					<i class='bx bxs-log-out-circle'></i>
