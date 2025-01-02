@@ -1,30 +1,27 @@
 ﻿@model SurveyProject.Models.IdentityUserModel
+    <h4 class="page-title text-primary fw-bold text-center ">Edit Profile</h4>
+    <form asp-action="EditProfiles" method="post" class="shadow p-4 rounded bg-light">
+        <input type="hidden" name="Id" value="@Model.Id" />
 
-<h1 class="text-center mb-4">Edit Profile</h1>
-
-<form asp-action="EditProfiles" method="post" class="container">
-    <input type="hidden" name="Id" value="@Model.Id" />
-
-    <div class="form-group mb-3">
-        <label for="UserName" class="form-label">Username</label>
-        <input type="text" id="UserName" name="UserName" class="form-control" value="@Model.UserName" readonly />
-    </div>
-
-    <div class="form-group mb-3">
-        <label for="Email" class="form-label">Email</label>
-        <input type="email" id="Email" name="Email" class="form-control" value="@Model.Email"  />
-    </div>
-
-    <div class="form-group mb-3">
-        <label for="IsApproved" class="form-label">Is Approved</label>
-        <div class="form-check">
-            <input type="checkbox" id="IsApproved" name="IsApproved" class="form-check-input" @(Model.IsApproved ? "checked" : "") />
-            <label class="form-check-label" for="IsApproved">Approved</label>
+        <div class="form-group mb-3">
+            <label for="UserName" class="form-label">Username</label>
+            <input type="text" id="UserName" name="UserName" class="form-control" value="@Model.UserName"  />
         </div>
-    </div>
 
-    <div class="d-flex justify-content-center mt-4">
-        
-        <button type="submit" class="btn btn-success btn-sm">Save Changes</button>
-    </div>
-</form>
+        <div class="form-group mb-3">
+            <label for="Email" class="form-label">Email</label>
+            <input type="email" id="Email" name="Email" class="form-control" value="@Model.Email" readonly />
+        </div>
+
+        <div class="form-group mb-3">
+            <div class="form-check">
+                <input type="checkbox" id="IsApproved" name="IsApproved" class="form-check-input" @(Model.IsApproved ? "checked" : "") />
+                <label class="form-check-label" for="IsApproved">Approved</label>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+            
+            <button type="submit" class="btn btn-primary " style="border-radius: 10px; color: white;">Save Changes</button>
+        </div>
+    </form>

@@ -1,46 +1,55 @@
 ﻿@model IEnumerable<SurveyProject.Models.IdentityUserModel>
 
 @{
-    ViewData["Title"] = "Manage Users";
+    ViewData["Title"] = "List Account Students";
 }
 
-<h2 class="text-center mb-4">@ViewData["Title"]</h2>
+<form class="shadow p-4 rounded bg-light">
+    <h2 class="page-title text-primary fw-bold">@ViewData["Title"]</h2>
+    <p class="page-title-subtitle text-muted">Manage accounts students</p>
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
-}
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
 
-<div class="table-responsive">
-    <table class="table table-striped table-hover table-bordered">
-        <thead class="thead-dark">
-            <tr>
-                <th>User Name</th>
-                <th>Email</th>
-                <th>Status</th>
-                <th>Actions</th> 
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model)
-            {
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@user.UserName</td>
-                    <td>@user.Email</td>
-                    <td><span class="text-success">Approved</span></td>
-                    <td>
-                       
-                        <form asp-action="Delete" method="post" style="display:inline;">
-                            <input type="hidden" name="userId" value="@user.Id" />
-                            <button type="submit" class="btn btn-sm btn-danger">
-                                <i class="fa fa-trash"></i> Delete
-                            </button>
-                        </form>
-                    </td>
+                    <th>No.</th>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Actions</th> 
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                }
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td><span class="text-success">Approved</span></td>
+                        <td>
+                            <a asp-action="EditProfiles" asp-route-userId="@user.Id" class="btn btn-primary " style="border-radius: 10px; color: white;">Edit Profile</a>
+                            <form asp-action="Delete" method="post" style="display:inline;">
+                                <input type="hidden" name="userId" value="@user.Id" />
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fa fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+        </table>
+    </div>
+</form>

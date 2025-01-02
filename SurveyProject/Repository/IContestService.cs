@@ -1,12 +1,10 @@
-﻿using SurveyProject.Models;
-using System;
+using SurveyProject.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace SurveyProject.Repository
+public interface IContestService
 {
-    public interface IContestService
-    {
-        Task<ContestModel> AddContestAsync(ContestModel contest);
-        Task<ContestModel?> GetContestByIdAsync(int id);
-    }
-
+    Task<ContestModel> AddContestAsync(ContestModel contest);
+    Task<WinnerModel> AddWinnerAsync(WinnerModel winner);
+    Task<IEnumerable<WinnerModel>> GetWinnersByContestIdAsync(int contestId);
 }

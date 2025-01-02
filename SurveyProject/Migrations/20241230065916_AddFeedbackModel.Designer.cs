@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SurveyProject.Repository;
 
@@ -11,9 +12,11 @@ using SurveyProject.Repository;
 namespace SurveyProject.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241230065916_AddFeedbackModel")]
+    partial class AddFeedbackModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,9 +192,6 @@ namespace SurveyProject.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsReviewed")
                         .HasColumnType("bit");
 
@@ -199,9 +199,6 @@ namespace SurveyProject.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -292,9 +289,6 @@ namespace SurveyProject.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Score")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -392,9 +386,6 @@ namespace SurveyProject.Migrations
                     b.Property<int>("SurveyId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TotalScore")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -428,7 +419,7 @@ namespace SurveyProject.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -437,8 +428,6 @@ namespace SurveyProject.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Surveys");
                 });
@@ -565,15 +554,6 @@ namespace SurveyProject.Migrations
                     b.Navigation("Survey");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("SurveyProject.Models.SurveyModel", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("SurveyProject.Models.QuestionModel", b =>

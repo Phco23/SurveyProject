@@ -21,6 +21,12 @@ namespace SurveyProject.Controllers
 
         }
 
+
+        public IActionResult ResponseFeedback()
+        {
+            return View();
+        }
+
         public IActionResult Index()
         {
             return View();

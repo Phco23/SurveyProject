@@ -1,0 +1,15 @@
+﻿@model SurveyProject.Models.FeedbackModel
+
+@{
+    ViewData["Title"] = "Confirm Delete";
+}
+
+<div class="container">
+    <h1 class="text-danger text-center">Confirm Delete</h1>
+    <p class="text-center">Are you sure you want to delete this feedback?</p>
+
+    <form asp-action="DeleteFeedback" asp-route-id="@Model.Id" method="post" class="text-center">
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="@Url.Action("ManageFeedback", "Feedback")" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
